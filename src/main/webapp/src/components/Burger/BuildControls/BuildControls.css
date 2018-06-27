@@ -1,0 +1,31 @@
+.BuildControls {
+  width: 100%;
+  background-color: #cf8f2e;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  box-shadow: 0 2px 1px #ccc;
+  margin: auto;
+  padding: 10px 0;
+}
+
+.BuildControls-Price {
+  color: #ccff11;
+  font-weight: bold;
+}
+
+.flex-container {
+  display: flex;
+  /* flex-direction: column, column-reverse, row, row-reverse; */
+  /* flex-wrap: wrap;  */
+  /* wrap: inner div's width, height are not fixed */
+  /* flex-flow is not needed */
+  /* justify-content: flex-start, flex-end, center, space-around, space-between; */
+  height: 300px;
+
+  /* align-content will treat the flex-box as one single flex box, but align-items will provide more than one flex-boxes when needed */
+  /* align-items: stretch, flex-start, flex-end, center; */
+  /* align-content: center, flex-start, flex-end, space-between; */
+
+  /* flex-grow: 10; this specifics portion of a box just like the row/col number */
+}
