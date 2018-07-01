@@ -4,6 +4,7 @@ import Aux from "../../hoc/HOC";
 import Burger from "../../components/Burger/Burger";
 import BuildControls from "../../components/Burger/BuildControls/BuildControls";
 import Modal from "../../components/UI/Modal/Modal";
+import OrderSummary from "../../components/Burger/OrderSummary/OrderSummary";
 
 const INGREDIENT_PRICES = {
   bacon: 0.7,
@@ -54,7 +55,8 @@ class BurgerBuilder extends Component {
       meat: 0
     },
     totalPrice: 4,
-    purchasable: false
+    purchasable: false,
+    purchasing: false
   };
 
   // incrementIngsHandler = incrementIngsHandler.bind(this);
@@ -81,6 +83,19 @@ class BurgerBuilder extends Component {
     const priceAddition = INGREDIENT_PRICES[type];
     const oldPrice = this.state.totalPrice;
     const newPrice = oldPrice + priceAddition;
+    /* 
+      Warm Reminder: Actually, there are three different ways to use setState();
+      #1 this.setState( { newState } );
+      #2 this.setState( { newState }, callbackFunction ); 
+         // callbackFunction having the format () => { return void; } will execute immediately after setState()
+      #3 this.setState( (prevState, prevProps) => { return { newState }; });
+         Reference: https://stackoverflow.com/questions/45619297/prevstate-in-this-setstate-a-copy-or-a-reference
+         i.   prevState is exactly the same as this.state ( same reference prevState === this.state ), 
+              but using prevState will be better because setState() will be exeuted in queue order,  prevState will use the "last state" just before mutation, but this.state will be affected in the queue order 
+         ii.  prevState should be immutable as well just like this.state! Use const newState = { ...prevState } first!
+         iii. Like props, try not to modify the second argument of setState fucntion "prevProps"
+      })
+   */
     this.setState({
       ingredients: updatedIngredients,
       totalPrice: newPrice,
@@ -108,6 +123,18 @@ class BurgerBuilder extends Component {
     });
   };
 
+  purchaseHandler = () => {
+    this.setState({ purchasing: true });
+  };
+
+  purchaseCancelHandler = () => {
+    this.setState({ purchasing: false });
+  };
+
+  purchaseContinueHandler = () => {
+    alert("You continue!");
+  };
+
   render() {
     const disabledInfo = {
       ...this.state.ingredients
@@ -119,13 +146,24 @@ class BurgerBuilder extends Component {
     }
     return (
       <Aux>
-        <Modal />
+        <Modal
+          show={this.state.purchasing}
+          modalClosed={this.purchaseCancelHandler}
+        >
+          <OrderSummary
+            ingredients={this.state.ingredients}
+            price={this.state.totalPrice}
+            purchaseCancelled={this.purchaseCancelHandler}
+            purchaseContinued={this.purchaseContinueHandler}
+          />
+        </Modal>
         <Burger ingredients={this.state.ingredients} />
         <BuildControls
           ingredientAdded={this.addIngredientHandler}
           ingredientRemoved={this.removeIngredientHandler}
           disabled={disabledInfo}
           purchasable={this.state.purchasable}
+          ordered={this.purchaseHandler}
           price={this.state.totalPrice}
         />
       </Aux>
