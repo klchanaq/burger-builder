@@ -19,7 +19,7 @@ const burger = function (props) {
             });
         });
     
-    console.log(transformedIngredients);
+    // console.log(transformedIngredients);
     
     // result: a 2-D Array of JSX
     // For Example, transformedIngredients = [
@@ -35,7 +35,7 @@ const burger = function (props) {
             return arr.concat(el);
         }, []);
 
-    console.log(transformedIngredients);
+    // console.log(transformedIngredients);
 
     if ( transformedIngredients.length === 0 ) {
         transformedIngredients = <p>Please start adding ingredients</p>
