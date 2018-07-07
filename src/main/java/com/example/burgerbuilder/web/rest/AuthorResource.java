@@ -2,15 +2,19 @@ package com.example.burgerbuilder.web.rest;
 
 import com.example.burgerbuilder.domain.Author;
 import com.example.burgerbuilder.service.AuthorService;
+import com.example.burgerbuilder.web.rest.errors.BadRequestAlertException;
+import com.example.burgerbuilder.web.rest.util.HeaderUtil;
+import com.example.burgerbuilder.web.rest.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.net.URI;
 import java.net.URISyntaxException;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -40,8 +44,13 @@ public class AuthorResource {
     @PostMapping("/authors")
     public ResponseEntity<Author> createAuthor(@Valid @RequestBody Author author) throws URISyntaxException {
         log.debug("REST request to save Author : {}", author);
+        if (author.getId() != null) {
+            throw new BadRequestAlertException("A new author cannot already have an ID", ENTITY_NAME, "idexists");
+        }
         Author result = authorService.save(author);
-        return new ResponseEntity<>(result, HttpStatus.OK);
+        return ResponseEntity.created(new URI("/api/authors/" + result.getId()))
+                .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
+                .body(result);
     }
 
     /**
@@ -60,7 +69,9 @@ public class AuthorResource {
             return createAuthor(author);
         }
         Author result = authorService.save(author);
-        return new ResponseEntity<>(result, HttpStatus.OK);
+        return ResponseEntity.ok()
+                .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, author.getId().toString()))
+                .body(result);
     }
 
     /**
@@ -69,7 +80,7 @@ public class AuthorResource {
      * @return the ResponseEntity with status 200 (OK) and the list of authors in body
      */
     @GetMapping("/authors")
-    public Iterable<Author> getAllAuthors() {
+    public List<Author> getAllAuthors() {
         log.debug("REST request to get all Authors");
         return authorService.findAll();
     }
@@ -84,10 +95,19 @@ public class AuthorResource {
     public ResponseEntity<Author> getAuthor(@PathVariable Long id) {
         log.debug("REST request to get Author : {}", id);
         Optional<Author> author = authorService.findOne(id);
-        return author
-                .map(_author -> new ResponseEntity<>(_author, HttpStatus.OK))
-                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
-        // return author.isPresent() ? new ResponseEntity<>(author.get(), HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return ResponseUtil.wrapOrNotFound(author);
     }
 
+    /**
+     * DELETE  /authors/:id : delete the "id" author.
+     *
+     * @param id the id of the author to delete
+     * @return the ResponseEntity with status 200 (OK)
+     */
+    @DeleteMapping("/authors/{id}")
+    public ResponseEntity<Void> deleteAuthor(@PathVariable Long id) {
+        log.debug("REST request to delete Author : {}", id);
+        authorService.delete(id);
+        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
+    }
 }

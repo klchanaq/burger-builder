@@ -2,6 +2,7 @@ package com.example.burgerbuilder.service;
 
 import com.example.burgerbuilder.domain.Author;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -22,7 +23,7 @@ public interface AuthorService {
      *
      * @return the collection of entities
      */
-    Iterable<Author> findAll();
+    List<Author> findAll();
 
     /**
      * Get the "id" author.
@@ -35,9 +36,9 @@ public interface AuthorService {
     /**
      * Delete the "id" author.
      *
-     * @param author the entity to delete
+     * @param id the entity id to delete
      */
-    void delete(Author author);
+    void delete(Long id);
 
 }
 

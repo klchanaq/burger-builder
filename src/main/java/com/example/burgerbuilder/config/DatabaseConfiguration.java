@@ -1,7 +1,10 @@
 package com.example.burgerbuilder.config;
 
 import com.example.burgerbuilder.domain.Author;
+import com.example.burgerbuilder.domain.CustomerOrder;
+import com.example.burgerbuilder.repository.Ingredients;
 import com.example.burgerbuilder.service.AuthorService;
+import com.example.burgerbuilder.service.CustomerOrderService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -28,15 +31,15 @@ public class DatabaseConfiguration {
     }
 
     @Bean
-    CommandLineRunner commandLineRunner(AuthorService authorService) {
+    CommandLineRunner commandLineRunner(AuthorService authorService, CustomerOrderService customerOrderService) {
         return new CommandLineRunner() {
             @Override
             public void run(String... args) throws Exception {
-                Author author = new Author();
-                author.setName("John White");
-                author.setAge(20);
-                author.setRegisterDate(LocalDate.now());
-                author.setLastSignDateTime(ZonedDateTime.now());
+                Author author = new Author(
+                        null,
+                        "John White", 20,
+                        LocalDate.now(), ZonedDateTime.now()
+                );
                 authorService.save(author);
                 Author author2 = new Author();
                 author2.setName("Mary Green");
@@ -44,6 +47,16 @@ public class DatabaseConfiguration {
                 author2.setRegisterDate(LocalDate.now());
                 author2.setLastSignDateTime(ZonedDateTime.now());
                 authorService.save(author2);
+
+                CustomerOrder customerOrder1 = new CustomerOrder(
+                        null, "Maxi", new Ingredients()
+                );
+                customerOrderService.save(customerOrder1);
+
+                CustomerOrder customerOrder2 = new CustomerOrder(
+                        null, "Jane", new Ingredients(1,2,1,3)
+                );
+                customerOrderService.save(customerOrder2);
             }
         };
     }

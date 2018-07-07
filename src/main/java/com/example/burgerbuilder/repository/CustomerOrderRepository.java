@@ -1,9 +1,9 @@
 package com.example.burgerbuilder.repository;
 
-import com.example.burgerbuilder.domain.Author;
+import com.example.burgerbuilder.domain.CustomerOrder;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface AuthorRepository extends JpaRepository<Author, Long> {
+public interface CustomerOrderRepository extends JpaRepository<CustomerOrder, Long> {
 }

@@ -1,8 +1,6 @@
 package com.example.burgerbuilder.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
@@ -15,7 +13,6 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "author")
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class Author implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -25,23 +22,44 @@ public class Author implements Serializable {
     private Long id;
 
     @NotNull
+    @Max(value = 20)
+    @Column(nullable = false)
     private String name;
 
     @NotNull
     @Min(value = 0)
     @Max(value = 100)
+    @Column(nullable = true)
     private Integer age;
 
     // @JsonFormat( pattern = "dd/mm/yy" ) this will only be modified on Jackson JSON <-> Object
     @NotNull
+    @Column(nullable = false)
     private LocalDate registerDate;
 
     @NotNull
+    @Column(nullable = false)
     private ZonedDateTime lastSignDateTime;
 
 //    @OneToMany(mappedBy = "author")
 //    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 //    private Set<Blog> blogs = new HashSet<>();
+
+
+    public Author() {
+    }
+
+    public Author(Long id,
+                  @NotNull String name,
+                  @NotNull @Min(value = 0) @Max(value = 100) Integer age,
+                  @NotNull LocalDate registerDate,
+                  @NotNull ZonedDateTime lastSignDateTime) {
+        this.id = id;
+        this.name = name;
+        this.age = age;
+        this.registerDate = registerDate;
+        this.lastSignDateTime = lastSignDateTime;
+    }
 
     public Long getId() {
         return id;

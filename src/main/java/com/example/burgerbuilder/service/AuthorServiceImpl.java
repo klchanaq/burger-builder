@@ -6,7 +6,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import sun.rmi.runtime.Log;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -43,7 +45,7 @@ public class AuthorServiceImpl implements AuthorService {
      */
     @Override
     @Transactional(readOnly = true)
-    public Iterable<Author> findAll() {
+    public List<Author> findAll() {
         log.debug("Request to get all Authors");
         return authorRepository.findAll();
     }
@@ -64,11 +66,11 @@ public class AuthorServiceImpl implements AuthorService {
     /**
      * Delete the "id" author.
      *
-     * @param author
+     * @param id the id of the entity
      */
     @Override
-    public void delete(Author author) {
-        log.debug("Request to get delete an Author : {}" ,author);
-        authorRepository.delete(author);
+    public void delete(Long id) {
+        log.debug("Request to get delete an Author : {}", id);
+        authorRepository.deleteById(id);
     }
 }
