@@ -6,6 +6,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
@@ -22,7 +23,7 @@ public class Author implements Serializable {
     private Long id;
 
     @NotNull
-    @Max(value = 20)
+    @Size(min = 0, max = 30)
     @Column(nullable = false)
     private String name;
 
@@ -45,12 +46,11 @@ public class Author implements Serializable {
 //    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 //    private Set<Blog> blogs = new HashSet<>();
 
-
     public Author() {
     }
 
     public Author(Long id,
-                  @NotNull String name,
+                  @NotNull @Size(min = 0, max = 30) String name,
                   @NotNull @Min(value = 0) @Max(value = 100) Integer age,
                   @NotNull LocalDate registerDate,
                   @NotNull ZonedDateTime lastSignDateTime) {

@@ -1,21 +1,26 @@
 package com.example.burgerbuilder.domain;
 
-import com.example.burgerbuilder.repository.Ingredients;
+import com.example.burgerbuilder.repository.EmbeddedDomain.Ingredients;
 
 import javax.persistence.*;
-import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Objects;
 
 /*
 * Reminder 1: Order is a Reserved Word on RDBMS SQL, Do not try to use the domain name "Order"
-* Reminder 2: @Embeddable & @Embedded are a pair of annotations for Inner Object
-* Reminder 3: @NotNull, @Nullable are only for Persistence Layer,
-*               which means they are only effective when dealing with Database e.g. CRUD
-*               CustomerOrder customerOrder = new CustomerOrder(); // OK
-*               customerOrder.customerName(null).ingredients(new Ingredients(1,2,1,3)) // OK
-*               customerOrderService.save(customerOrder) // Error!
+* Reminder 2: @Embeddable & @Embedded are a pair of annotations for Inner Object,
+*             @Embedded can be used at methods (getters) or field
+* Reminder 3: { @Min, @Max } (for Numeric Types),
+*             @Size(min = 0, max = 30) (for String, Map, Set and other Object Types),
+*             @NotNull, @Nullable
+*             are only for Persistence Layer,
+*             which means they are only effective when dealing with Database e.g. CRUD
+*             CustomerOrder customerOrder = new CustomerOrder(); // OK
+*             customerOrder.customerName(null).ingredients(new Ingredients(1,2,1,3)) // OK
+*             customerOrderService.save(customerOrder) // Error!
+* Reminder 4: Hibernate will use the setters, getters, default constructor to do its jobs
 * */
 
 @Entity
@@ -29,8 +34,8 @@ public class CustomerOrder implements Serializable {
     private Long id;
 
     @NotNull
+    @Size(min = 0, max = 30)
     @Column(nullable = false)
-    @Max(value = 20)
     private String customerName;
 
     @NotNull
@@ -38,10 +43,11 @@ public class CustomerOrder implements Serializable {
     private Ingredients ingredients;
 
     public CustomerOrder() {
+        this.ingredients = new Ingredients();
     }
 
     public CustomerOrder(Long id,
-                         @NotNull String customerName,
+                         @NotNull @Size(min = 0, max = 30) String customerName,
                          @NotNull Ingredients ingredients) {
         this.id = id;
         this.customerName = customerName;

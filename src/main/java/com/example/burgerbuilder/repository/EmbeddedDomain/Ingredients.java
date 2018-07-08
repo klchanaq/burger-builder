@@ -1,4 +1,4 @@
-package com.example.burgerbuilder.repository;
+package com.example.burgerbuilder.repository.EmbeddedDomain;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
