@@ -50,14 +50,12 @@ public class DatabaseConfiguration {
 
                 CustomerOrder customerOrder1 = new CustomerOrder(
                         null,
-                        "Maxi",
                         new Ingredients()
                 );
                 customerOrderService.save(customerOrder1);
 
                 CustomerOrder customerOrder2 = new CustomerOrder(
                         null,
-                        "Jane",
                         new Ingredients(1,2,1,3)
                 );
                 customerOrderService.save(customerOrder2);

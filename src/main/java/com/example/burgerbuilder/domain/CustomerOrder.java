@@ -4,7 +4,6 @@ import com.example.burgerbuilder.repository.EmbeddedDomain.Ingredients;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -34,11 +33,6 @@ public class CustomerOrder implements Serializable {
     private Long id;
 
     @NotNull
-    @Size(min = 0, max = 30)
-    @Column(nullable = false)
-    private String customerName;
-
-    @NotNull
     @Embedded
     private Ingredients ingredients;
 
@@ -47,10 +41,8 @@ public class CustomerOrder implements Serializable {
     }
 
     public CustomerOrder(Long id,
-                         @NotNull @Size(min = 0, max = 30) String customerName,
                          @NotNull Ingredients ingredients) {
         this.id = id;
-        this.customerName = customerName;
         this.ingredients = ingredients;
     }
 
@@ -60,19 +52,6 @@ public class CustomerOrder implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getCustomerName() {
-        return customerName;
-    }
-
-    public CustomerOrder customerName(String customerName) {
-        this.customerName = customerName;
-        return this;
-    }
-
-    public void setCustomerName(String customerName) {
-        this.customerName = customerName;
     }
 
     public Ingredients getIngredients() {
@@ -94,20 +73,18 @@ public class CustomerOrder implements Serializable {
         if (o == null || getClass() != o.getClass()) return false;
         CustomerOrder that = (CustomerOrder) o;
         return Objects.equals(id, that.id) &&
-                Objects.equals(customerName, that.customerName) &&
                 Objects.equals(ingredients, that.ingredients);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, customerName, ingredients);
+        return Objects.hash(id, ingredients);
     }
 
     @Override
     public String toString() {
         return "CustomerOrder{" +
                 "id=" + id +
-                ", customerName='" + customerName + '\'' +
                 ", ingredients=" + ingredients +
                 '}';
     }
