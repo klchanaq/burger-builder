@@ -1,6 +1,6 @@
 package com.example.burgerbuilder.domain;
 
-import com.example.burgerbuilder.repository.EmbeddedDomain.Ingredients;
+import com.example.burgerbuilder.domain.EmbeddedDomain.Ingredients;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;

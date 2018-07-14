@@ -2,7 +2,7 @@ package com.example.burgerbuilder.config;
 
 import com.example.burgerbuilder.domain.Author;
 import com.example.burgerbuilder.domain.CustomerOrder;
-import com.example.burgerbuilder.repository.EmbeddedDomain.Ingredients;
+import com.example.burgerbuilder.domain.EmbeddedDomain.Ingredients;
 import com.example.burgerbuilder.service.AuthorService;
 import com.example.burgerbuilder.service.CustomerOrderService;
 import org.slf4j.Logger;

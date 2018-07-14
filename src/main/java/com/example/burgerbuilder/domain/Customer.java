@@ -1,4 +1,6 @@
-package com.example.burgerbuilder.repository.EmbeddedDomain;
+package com.example.burgerbuilder.domain;
+
+import com.example.burgerbuilder.domain.EmbeddedDomain.Address;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;

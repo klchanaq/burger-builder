@@ -27,17 +27,18 @@ public class Author implements Serializable {
     @Column(nullable = false)
     private String name;
 
-    @NotNull
+    // @NotNull
     @Min(value = 0)
     @Max(value = 100)
     @Column(nullable = true)
     private Integer age;
 
-    // @JsonFormat( pattern = "dd/mm/yy" ) this will only be modified on Jackson JSON <-> Object
+    // @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd") //this will only be modified on Jackson JSON <-> Object
     @NotNull
     @Column(nullable = false)
     private LocalDate registerDate;
 
+    // @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     @NotNull
     @Column(nullable = false)
     private ZonedDateTime lastSignDateTime;
