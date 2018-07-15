@@ -145,53 +145,68 @@ class BurgerBuilder extends Component {
           country: "China Hong Kong"
         },
         email: "test@test.com"
-      },
-      deliveryMethod: "fastest"
+      }
+      // deliveryMethod: "fastest"
     };
 
-    // setTimeout((randomNum) => {
+    // setTimeout(() => {
     //   this.setState({ loading: false, purchasing: false });
-    // }, 3000, Math.random());
+    // }, 3000);
 
     axios
       .post("/api/customerOrders", order)
       .then(response => {
         console.log("[BurgerBuilder] ", response);
-        setTimeout(() => {
-          this.setState({ loading: false, purchasing: false });
-        }, 1500);
+        this.setState({ loading: false, purchasing: false });
       })
       .catch(error => {
-        console.log("[BurgerBuilder] ", error);
-        setTimeout(() => {
-          this.setState({ loading: false, purchasing: false });
-        }, 1500);
+        console.error("[BurgerBuilder] ", error);
+        this.setState({ loading: false, purchasing: false });
       });
   };
 
   componentDidMount() {
-    setTimeout(
-      randomNum => {
-        if (randomNum > 0.2) {
-          const _ingredients = {
-            bacon: 1,
-            cheese: 1,
-            salad: 0,
-            meat: 2
-          };
-          this.setState({
-            ingredients: _ingredients,
-            purchasable: this.updatePurchaseState(_ingredients)
-          });
-        } else {
-          this.setState({
-            error: true
-          });
-        }
-      },
-      500,
-      Math.random()
-    );
+    // setTimeout(
+    //   randomNum => {
+    //     if (randomNum > 0.2) {
+    //       const _ingredients = {
+    //         bacon: 1,
+    //         cheese: 1,
+    //         salad: 0,
+    //         meat: 2
+    //       };
+    //       this.setState({
+    //         ingredients: _ingredients,
+    //         purchasable: this.updatePurchaseState(_ingredients)
+    //       });
+    //     } else {
+    //       this.setState({
+    //         error: true
+    //       });
+    //     }
+    //   },
+    //   500,
+    //   Math.random()
+    // );
+
+    axios
+      .get("/api/customerOrders/" + 1)
+      .then(response => {
+        console.log("[BurgerBuilder] response = ", response);
+        const _ingredients  = response.data.ingredients;
+        const _totalPrice = response.data.price;
+        this.setState({
+          ingredients: _ingredients,
+          totalPrice: _totalPrice,
+          purchasable: this.updatePurchaseState(_ingredients)
+        });
+      })
+      .catch(err => {
+        console.error("[BurgerBuilder] error = ", err);
+        this.setState({
+          error: true
+        });
+      });
   }
 
   render() {

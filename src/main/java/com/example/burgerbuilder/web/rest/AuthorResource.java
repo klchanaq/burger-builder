@@ -22,6 +22,11 @@ import java.util.Optional;
  */
 @RestController
 @RequestMapping("/api")
+@CrossOrigin(
+        origins = {"*"},
+        allowedHeaders = {"*"},
+        exposedHeaders =  {"X-burgerBuilder-alert", "X-burgerBuilder-params", "X-burgerBuilder-error"},
+        maxAge = 3600)
 public class AuthorResource {
 
     private final Logger log = LoggerFactory.getLogger(AuthorResource.class);
