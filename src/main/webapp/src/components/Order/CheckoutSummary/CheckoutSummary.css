@@ -1,0 +1,11 @@
+.CheckoutSummary {
+  width: 80%;
+  margin: auto;
+  text-align: center;
+}
+
+@media (min-width: 600px) {
+  .CheckoutSummary {
+      /* Error-Prone for width: 500px becuase of the Media Query (min-width:1000px) at Burger.css*/
+  }
+}

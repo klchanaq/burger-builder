@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "./App.css";
-import Layout from "./hoc/Layout/Layout"
+import Layout from "./hoc/Layout/Layout";
 import BurgerBuilder from "./containers/BurgerBuilder/BurgerBuilder";
 
 /* show how to import lodash */
@@ -8,6 +8,7 @@ import _ from "lodash";
 
 /* show how to import lodash function(s) */
 import _isNil from "lodash/isNil";
+import Checkout from "./containers/Checkout/Checkout";
 
 class App extends Component {
   showLodashExamples = () => {
@@ -33,6 +34,7 @@ class App extends Component {
       <div>
         <Layout>
           <BurgerBuilder />
+          <Checkout />
         </Layout>
       </div>
     );
