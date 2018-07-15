@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import "./App.css";
 import Layout from "./hoc/Layout/Layout";
 import BurgerBuilder from "./containers/BurgerBuilder/BurgerBuilder";
+import { Route, Switch, Redirect } from "react-router-dom";
 
 /* show how to import lodash */
 import _ from "lodash";
@@ -29,12 +30,19 @@ class App extends Component {
   };
 
   render() {
+    console.log("[App] render()...");
     this.showLodashExamples();
     return (
       <div>
         <Layout>
-          <BurgerBuilder />
-          <Checkout />
+          <Switch>
+            <Route path="/burgerBuilder" component={BurgerBuilder} />
+            <Route path="/checkout" component={Checkout} />
+            {/* <Redirect from="/" to="/burgerBuilder" /> */}
+            <Route path="*" render={() => <p>Home Page</p>} />
+          </Switch>
+          {/* <BurgerBuilder />
+          <Checkout /> */}
         </Layout>
       </div>
     );

@@ -132,26 +132,26 @@ class BurgerBuilder extends Component {
   };
 
   purchaseContinueHandler = () => {
-    this.setState({ loading: true });
     // alert("You continue!");
-    const order = {
-      ingredients: this.state.ingredients,
-      price: this.state.totalPrice,
-      customer: {
-        name: "Edward Chan",
-        address: {
-          street: "Teststreet 1",
-          zipCode: "12345",
-          country: "China Hong Kong"
-        },
-        email: "test@test.com"
-      }
-      // deliveryMethod: "fastest"
-    };
+    // this.setState({ loading: true });
+    // const order = {
+    //   ingredients: this.state.ingredients,
+    //   price: this.state.totalPrice,
+    //   customer: {
+    //     name: "Edward Chan",
+    //     address: {
+    //       street: "Teststreet 1",
+    //       zipCode: "12345",
+    //       country: "China Hong Kong"
+    //     },
+    //     email: "test@test.com"
+    //   },
+    //   deliveryMethod: "fastest"
+    // };
 
-    setTimeout(() => {
-      this.setState({ loading: false, purchasing: false });
-    }, 3000);
+    // setTimeout(() => {
+    //   this.setState({ loading: false, purchasing: false });
+    // }, 3000);
 
     // axios
     //   .post("/api/customerOrders", order)
@@ -163,6 +163,17 @@ class BurgerBuilder extends Component {
     //     console.error("[BurgerBuilder] ", error);
     //     this.setState({ loading: false, purchasing: false });
     //   });
+    const queryParams = [];
+    for (const [key, val] of Object.entries(this.state.ingredients)) {
+      // queryParams.push(key+"="+val); // okay as well but not recommended
+      queryParams.push(encodeURIComponent(key) + "=" + encodeURIComponent(val));
+    }
+    const queryString = queryParams.join("&");
+    this.props.history.push({
+      pathname: "/checkout",
+      search: "?" + queryString
+    });
+    // this.props.history.push("/checkout");
   };
 
   componentDidMount() {
@@ -210,6 +221,8 @@ class BurgerBuilder extends Component {
   }
 
   render() {
+    console.log("[BurgerBuilder] render()...");
+    console.log("[BurgerBuilder] props = ", this.props);
     const disabledInfo = {
       ...this.state.ingredients
     };
