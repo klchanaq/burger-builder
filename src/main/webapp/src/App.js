@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import "./App.css";
 import Layout from "./hoc/Layout/Layout";
 import BurgerBuilder from "./containers/BurgerBuilder/BurgerBuilder";
+import Orders from "./containers/Orders/Orders";
 import { Route, Switch, Redirect } from "react-router-dom";
 
 /* show how to import lodash */
@@ -37,7 +38,8 @@ class App extends Component {
         <Layout>
           <Switch>
             <Route path="/burgerBuilder" component={BurgerBuilder} />
-            <Route path="/checkout" component={Checkout} />
+            {/* <Route path="/checkout" component={Checkout} /> */}
+            <Route path="/orders" component={Orders} />
             {/* <Redirect from="/" to="/burgerBuilder" /> */}
             <Route path="*" render={() => <p>Home Page</p>} />
           </Switch>
