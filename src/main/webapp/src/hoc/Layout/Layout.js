@@ -30,6 +30,7 @@ class Layout extends Component {
   };
 
   render() {
+    console.log("[Layout] render()...");
     return (
       <Aux>
         <Toolbar drawerToggleClicked={this.sideDrawerToggleHandler} />

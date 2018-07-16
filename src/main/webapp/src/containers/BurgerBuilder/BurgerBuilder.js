@@ -133,41 +133,17 @@ class BurgerBuilder extends Component {
 
   purchaseContinueHandler = () => {
     // alert("You continue!");
-    // this.setState({ loading: true });
-    // const order = {
-    //   ingredients: this.state.ingredients,
-    //   price: this.state.totalPrice,
-    //   customer: {
-    //     name: "Edward Chan",
-    //     address: {
-    //       street: "Teststreet 1",
-    //       zipCode: "12345",
-    //       country: "China Hong Kong"
-    //     },
-    //     email: "test@test.com"
-    //   },
-    //   deliveryMethod: "fastest"
-    // };
-
-    // setTimeout(() => {
-    //   this.setState({ loading: false, purchasing: false });
-    // }, 3000);
-
-    // axios
-    //   .post("/api/customerOrders", order)
-    //   .then(response => {
-    //     console.log("[BurgerBuilder] ", response);
-    //     this.setState({ loading: false, purchasing: false });
-    //   })
-    //   .catch(error => {
-    //     console.error("[BurgerBuilder] ", error);
-    //     this.setState({ loading: false, purchasing: false });
-    //   });
     const queryParams = [];
     for (const [key, val] of Object.entries(this.state.ingredients)) {
       // queryParams.push(key+"="+val); // okay as well but not recommended
       queryParams.push(encodeURIComponent(key) + "=" + encodeURIComponent(val));
     }
+    // Add Price Param
+    queryParams.push(
+      encodeURIComponent("totalPrice") +
+        "=" +
+        encodeURIComponent(this.state.totalPrice)
+    );
     const queryString = queryParams.join("&");
     this.props.history.push({
       pathname: "/checkout",
@@ -183,11 +159,20 @@ class BurgerBuilder extends Component {
           const _ingredients = {
             bacon: 1,
             cheese: 1,
-            salad: 0,
+            salad: 1,
             meat: 2
           };
           this.setState({
             ingredients: _ingredients,
+            totalPrice:
+              this.state.totalPrice +
+              Object.entries(_ingredients)
+                .map(([key, value]) => {
+                  return INGREDIENT_PRICES[key] * value;
+                })
+                .reduce((currentVal, el) => {
+                  return currentVal + el;
+                }, 0),
             purchasable: this.updatePurchaseState(_ingredients)
           });
         } else {
