@@ -4,7 +4,7 @@ import Burger from "../../Burger/Burger";
 import Button from "../../UI/Button/Button";
 
 const checkoutSummary = function(props) {
-  console.log("[checkoutSummary] render()...");
+  // console.log("[checkoutSummary] render()...");
   return (
     <div className="CheckoutSummary">
       <h1>Wow...! It looks tasty!</h1>

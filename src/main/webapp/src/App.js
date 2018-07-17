@@ -31,7 +31,7 @@ class App extends Component {
   };
 
   render() {
-    console.log("[App] render()...");
+    console.log("[App] render()...", this.props);
     this.showLodashExamples();
     return (
       <div>

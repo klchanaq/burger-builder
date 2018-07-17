@@ -206,8 +206,7 @@ class BurgerBuilder extends Component {
   }
 
   render() {
-    console.log("[BurgerBuilder] render()...");
-    console.log("[BurgerBuilder] props = ", this.props);
+    console.log("[BurgerBuilder] render()...", this.props);
     const disabledInfo = {
       ...this.state.ingredients
     };

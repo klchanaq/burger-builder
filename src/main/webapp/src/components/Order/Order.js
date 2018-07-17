@@ -2,11 +2,20 @@ import React from "react";
 import "./Order.css";
 
 const order = function(props) {
+  let { ingredients, price } = props;
+  let ingredientOutputs = Object.entries(ingredients).map(([key, val]) => {
+    return (
+      <label className="Order-IngreidentOutput">
+        {key}
+        {val}
+      </label>
+    );
+  });
   return (
     <div className="Order">
-      <p>Ingredients: Salad (1)</p>
+      <p>Ingredients: {ingredientOutputs}</p>
       <p>
-        Price: <strong>USD 5.45</strong>
+        Price: <strong>{price}</strong>
       </p>
     </div>
   );

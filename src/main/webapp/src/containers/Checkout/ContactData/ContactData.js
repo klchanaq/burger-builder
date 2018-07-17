@@ -17,7 +17,7 @@ class ContactData extends Component {
 
   orderHandler = $event => {
     $event.preventDefault();
-    console.log("[ContactData] this.props", this.props);
+    // console.log("[ContactData] this.props", this.props);
     this.setState({ loading: true });
     const order = {
       ingredients: this.props.ingredients,
@@ -52,7 +52,7 @@ class ContactData extends Component {
   };
 
   render() {
-    console.log("[ContactData] render()...");
+    console.log("[ContactData] render()...", this.props);
     let form = (
       <form>
         <input type="text" name="name" placeholder="Your Name" />
