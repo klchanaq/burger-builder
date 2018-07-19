@@ -3,16 +3,83 @@ import "./ContactData.css";
 import Button from "../../../components/UI/Button/Button";
 import Spinner from "../../../components/UI/Spinner/Spinner";
 import axios from "../../../axios-orders";
+import Input from "../../../components/UI/Input/Input";
 
 class ContactData extends Component {
   state = {
-    name: "",
-    email: "",
-    address: {
-      street: "",
-      postalCode: ""
+    orderForm: {
+      name: {
+        label: "Name",
+        elementType: "input",
+        elementConfig: {
+          type: "text",
+          placeholder: "Your Name"
+        },
+        value: ""
+      },
+      street: {
+        label: "Street",
+        elementType: "input",
+        elementConfig: {
+          type: "text",
+          placeholder: "Street"
+        },
+        value: ""
+      },
+      zipCode: {
+        label: "Zip Code",
+        elementType: "input",
+        elementConfig: {
+          type: "text",
+          placeholder: "ZIP Code"
+        },
+        value: ""
+      },
+      country: {
+        label: "Country",
+        elementType: "input",
+        elementConfig: {
+          type: "text",
+          placeholder: "Country"
+        },
+        value: ""
+      },
+      email: {
+        label: "E-mail",
+        elementType: "input",
+        elementConfig: {
+          type: "email",
+          placeholder: "Your E-Mail"
+        },
+        value: ""
+      },
+      deliveryMethod: {
+        label: "Delivery Method",
+        elementType: "select",
+        elementConfig: {
+          options: [
+            { value: "FATEST", displayValue: "Fastest" },
+            { value: "NORMAL", displayValue: "Normal" },
+            { value: "NOT_SPECIFIC", displayValue: "Not Specific" }
+          ]
+        },
+        value: ""
+      }
     },
     loading: false
+  };
+
+  inputChangedHandler = ($event, inputIdentifier) => {
+    const updatedOrderForm = {
+      ...this.state.orderForm
+    };
+    // clone the first-level inner object is totally enough, since "value" is right there
+    const updatedFormElement = {
+      ...updatedOrderForm[inputIdentifier]
+    };
+    updatedFormElement.value = $event.target.value;
+    updatedOrderForm[inputIdentifier] = updatedFormElement;
+    this.setState({ orderForm: updatedOrderForm });
   };
 
   orderHandler = $event => {
@@ -55,11 +122,19 @@ class ContactData extends Component {
     console.log("[ContactData] render()...", this.props);
     let form = (
       <form>
-        <input type="text" name="name" placeholder="Your Name" />
-        <input type="email" name="email" placeholder="Your E-mail" />
-        <input type="text" name="street" placeholder="Your Street" />
-        <input type="text" name="postalCode" placeholder="Your Postal Code" />
-        <Button btnType="Success" clicked={this.orderHandler}>
+        {Object.entries(this.state.orderForm).map(([key, formEl]) => {
+          return (
+            <Input
+              key={key}
+              label={formEl.label}
+              elementType={formEl.elementType}
+              elementConfig={formEl.elementConfig}
+              value={formEl.value}
+              changed={e => this.inputChangedHandler(e, key)}
+            />
+          );
+        })}
+        <Button btnType="Success" clicked={null}>
           Confirm
         </Button>
       </form>
