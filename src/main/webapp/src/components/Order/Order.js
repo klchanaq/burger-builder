@@ -5,7 +5,7 @@ const order = function(props) {
   let { ingredients, price } = props;
   let ingredientOutputs = Object.entries(ingredients).map(([key, val]) => {
     return (
-      <label className="Order-IngreidentOutput">
+      <label className="Order-IngreidentOutput" key={key}>
         {key}
         {val}
       </label>

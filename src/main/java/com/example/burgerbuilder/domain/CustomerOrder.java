@@ -2,14 +2,10 @@ package com.example.burgerbuilder.domain;
 
 import com.example.burgerbuilder.domain.EmbeddedDomain.Ingredients;
 import com.example.burgerbuilder.domain.enumeration.DELIVERYMETHOD_TYPES;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.*;
 
 import javax.persistence.*;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -45,18 +41,29 @@ public class CustomerOrder implements Serializable {
     private Ingredients ingredients = new Ingredients();
 
     @NotNull
-    @Min(value = 1)
+    // For Float, Double ( v.s. @Min, @Max for Short, Integer, Long Learned from Jhipster on 18-07-2018
+    // Actually both @Min and @DecimalMin are the same, and both @Max and @DecimalMax are nearly the same but for intuitive behavior
+    // Learned from Jhipster on 18-07-2018
+    @DecimalMin(value = "0")
+    @DecimalMax(value = "20")
+    //@Min(0)
+    //@Max(20)
     @Column(nullable = false)
     private Float price;
 
     @NotNull
+    // Learned from Jhipster on 18-07-2018, For passing String (e.g. deliveryMetod: "FASTEST") at frontend to @RequestBody at Spring
+    @Enumerated(value = EnumType.STRING)
     @Column(nullable = false)
-    private Enum<DELIVERYMETHOD_TYPES> deliveryMethod = DELIVERYMETHOD_TYPES.NOT_SPECIFIC;
+    private DELIVERYMETHOD_TYPES deliveryMethod = DELIVERYMETHOD_TYPES.NOT_SPECIFIC; // Don't use Enum<T> here!
 
     @NotNull
-    @ManyToOne(optional = false, cascade = { CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @ManyToOne(optional = false,
+            cascade = { CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "customer_id")
-    @JsonIgnoreProperties(value = {"customerOrders"})
+    @JsonIgnoreProperties(value = {"customerOrders"}) // Learned from Jhipster on 18-07-2018, or value = "" for general purpose
+    //@JsonBackReference
+    //@JsonManagedReference
     private Customer customer;
 
     public CustomerOrder() {
@@ -64,8 +71,8 @@ public class CustomerOrder implements Serializable {
 
     public CustomerOrder(Long id,
                          @NotNull Ingredients ingredients,
-                         @NotNull @Min(value = 1) Float price,
-                         @NotNull Enum<DELIVERYMETHOD_TYPES> deliveryMethod,
+                         @NotNull @DecimalMin(value = "0") @DecimalMax(value = "20") Float price,
+                         @NotNull DELIVERYMETHOD_TYPES deliveryMethod,
                          @NotNull Customer customer) {
         this.id = id;
         this.ingredients = ingredients;
@@ -125,12 +132,12 @@ public class CustomerOrder implements Serializable {
         return deliveryMethod;
     }
 
-    public CustomerOrder deliveryMethod(Enum<DELIVERYMETHOD_TYPES> deliveryMethod) {
+    public CustomerOrder deliveryMethod(DELIVERYMETHOD_TYPES deliveryMethod) {
         this.deliveryMethod = deliveryMethod;
         return this;
     }
 
-    public void setDeliveryMethod(Enum<DELIVERYMETHOD_TYPES> deliveryMethod) {
+    public void setDeliveryMethod(DELIVERYMETHOD_TYPES deliveryMethod) {
         this.deliveryMethod = deliveryMethod;
     }
 

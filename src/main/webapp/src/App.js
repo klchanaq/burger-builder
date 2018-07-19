@@ -38,7 +38,7 @@ class App extends Component {
         <Layout>
           <Switch>
             <Route path="/burgerBuilder" component={BurgerBuilder} />
-            {/* <Route path="/checkout" component={Checkout} /> */}
+            <Route path="/checkout" component={Checkout} />
             <Route path="/orders" component={Orders} />
             {/* <Redirect from="/" to="/burgerBuilder" /> */}
             <Route path="*" render={() => <p>Home Page</p>} />

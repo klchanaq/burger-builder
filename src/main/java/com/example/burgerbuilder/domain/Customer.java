@@ -1,7 +1,9 @@
 package com.example.burgerbuilder.domain;
 
 import com.example.burgerbuilder.domain.EmbeddedDomain.Address;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
@@ -40,6 +42,8 @@ public class Customer implements Serializable {
     private Address address;
 
     @OneToMany(mappedBy = "customer", cascade = {CascadeType.ALL})
+    //@JsonManagedReference
+    //@JsonBackReference
     private List<CustomerOrder> customerOrders = new ArrayList<>();
 
     public Customer() {
