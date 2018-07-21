@@ -15,7 +15,12 @@ class ContactData extends Component {
           type: "text",
           placeholder: "Your Name"
         },
-        value: ""
+        value: "",
+        validation: {
+          required: true
+        },
+        valid: false,
+        touched: false
       },
       street: {
         label: "Street",
@@ -24,7 +29,12 @@ class ContactData extends Component {
           type: "text",
           placeholder: "Street"
         },
-        value: ""
+        value: "",
+        validation: {
+          required: true
+        },
+        valid: false,
+        touched: false
       },
       zipCode: {
         label: "Zip Code",
@@ -33,7 +43,15 @@ class ContactData extends Component {
           type: "text",
           placeholder: "ZIP Code"
         },
-        value: ""
+        value: "",
+        validation: {
+          required: true,
+          minLength: 5,
+          maxLength: 5,
+          isNumeric: true
+        },
+        valid: false,
+        touched: false
       },
       country: {
         label: "Country",
@@ -42,7 +60,12 @@ class ContactData extends Component {
           type: "text",
           placeholder: "Country"
         },
-        value: ""
+        value: "",
+        validation: {
+          required: true
+        },
+        valid: false,
+        touched: false
       },
       email: {
         label: "E-mail",
@@ -51,22 +74,76 @@ class ContactData extends Component {
           type: "email",
           placeholder: "Your E-Mail"
         },
-        value: ""
+        value: "",
+        validation: {
+          required: true,
+          isEmail: true
+        },
+        valid: false,
+        touched: false
       },
       deliveryMethod: {
         label: "Delivery Method",
         elementType: "select",
         elementConfig: {
           options: [
-            { value: "FATEST", displayValue: "Fastest" },
+            { value: "NOT_SPECIFIC", displayValue: "Not Specific" },
             { value: "NORMAL", displayValue: "Normal" },
-            { value: "NOT_SPECIFIC", displayValue: "Not Specific" }
+            { value: "FASTEST", displayValue: "Fastest" }
           ]
         },
-        value: ""
+        value: "NOT_SPECIFIC",
+        validation: {},
+        valid: true
       }
     },
+    isOrderFormValid: false,
     loading: false
+  };
+
+  /* 
+  the default value of parameter 'rules' will be resolved as rules = [arguments] || {}
+  it is a good practice when you want to aviod the error "the xxx property is undefined"
+     call to checkValidity('a', { required: true }) // rules = { required: true } || {}
+     call to checkValidity('a', { })// rules = {} || {}
+     call to checkValidity('a') // rules = undefined || {}
+     call to checkValidity('a', undefined) // rules = undefined || {}
+  all of the usages of checkValidity() function will not throw error
+  */
+   /*
+   if no default value:
+     call to checkValidity('a', { required: true }) // rules = { required: true }
+     call to checkValidity('a', {})// rules = {}
+     call to checkValidity('a') // rules = undefined
+     call to checkValidity('a', undefined) // rules = undefined
+   when you want to access the property of 'undefined' i.e. rules.required, error will throw
+   */
+
+  checkValidity = function(value, rules = {}) {
+    let isValid = true; // true at this moment in order to solve the common validation gotcha
+    if (rules.required) {
+      // check the input value : string
+      const _trimmedValue = value.trim();
+      isValid = _trimmedValue !== "" && isValid;
+    }
+    if (rules.minLength) {
+      isValid = value.length >= rules.minLength && isValid;
+    }
+
+    if (rules.maxLength) {
+      isValid = value.length <= rules.maxLength && isValid;
+    }
+    if (rules.isEmail) {
+      const pattern = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
+      isValid = pattern.test(value) && isValid;
+    }
+
+    if (rules.isNumeric) {
+      const pattern = /^\d+$/;
+      isValid = pattern.test(value) && isValid;
+    }
+
+    return isValid;
   };
 
   inputChangedHandler = ($event, inputIdentifier) => {
@@ -78,29 +155,46 @@ class ContactData extends Component {
       ...updatedOrderForm[inputIdentifier]
     };
     updatedFormElement.value = $event.target.value;
+    updatedFormElement.valid = this.checkValidity(
+      updatedFormElement.value,
+      updatedFormElement.validation
+    );
+    updatedFormElement.touched = true;
     updatedOrderForm[inputIdentifier] = updatedFormElement;
-    this.setState({ orderForm: updatedOrderForm });
+
+    // Object.values(updatedOrderForm).map(({ valid }) => {
+    //   isOrderFormValid = valid && isOrderFormValid;
+    // });
+    const isOrderFormValid = Object.values(updatedOrderForm)
+      .map(orderFormElement => orderFormElement.valid)
+      .reduce((currentFormValidity, el) => {
+        return currentFormValidity && el;
+      }, true);
+
+    this.setState({
+      orderForm: updatedOrderForm,
+      isOrderFormValid: isOrderFormValid
+    });
   };
 
   orderHandler = $event => {
     $event.preventDefault();
-    // console.log("[ContactData] this.props", this.props);
     this.setState({ loading: true });
+    const { orderForm } = this.state;
     const order = {
       ingredients: this.props.ingredients,
       price: this.props.price,
       customer: {
-        name: "Edward Chan",
+        name: orderForm.name.value,
         address: {
-          street: "Teststreet 1",
-          zipCode: "12345",
-          country: "China Hong Kong"
+          street: orderForm.street.value,
+          zipCode: orderForm.zipCode.value,
+          country: orderForm.country.value
         },
-        email: "test@test.com"
+        email: orderForm.email.value
       },
-      deliveryMethod: "fastest"
+      deliveryMethod: orderForm.deliveryMethod.value
     };
-
     setTimeout(() => {
       this.setState({ loading: false });
       this.props.history.push("/");
@@ -121,7 +215,9 @@ class ContactData extends Component {
   render() {
     console.log("[ContactData] render()...", this.props);
     let form = (
-      <form>
+      // we need to use onSubmit instead of onClick on button
+      // becuase we want to have basic validation checking by HTML form e.g. email format
+      <form onSubmit={this.orderHandler}>
         {Object.entries(this.state.orderForm).map(([key, formEl]) => {
           return (
             <Input
@@ -130,11 +226,13 @@ class ContactData extends Component {
               elementType={formEl.elementType}
               elementConfig={formEl.elementConfig}
               value={formEl.value}
+              invalid={!formEl.valid}
+              touched={formEl.touched}
               changed={e => this.inputChangedHandler(e, key)}
             />
           );
         })}
-        <Button btnType="Success" clicked={null}>
+        <Button btnType="Success" disabled={!this.state.isOrderFormValid}>
           Confirm
         </Button>
       </form>

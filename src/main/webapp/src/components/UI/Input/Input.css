@@ -27,3 +27,27 @@
   outline: none;
   background-color: #ccc;
 }
+
+/* Problem */
+/* the following is valid but not working, 
+   becuase the input will override the properties 
+  .Input-Invalid { 
+    border: 1px solid red;
+  }
+*/
+
+/* Solution 1 */
+/* 
+  .Input input, 
+  .Input textarea, 
+  .Input select {
+      border: 1px solid red;
+  }
+*/
+
+/* Solution 2 */
+.Input-Invalid { 
+  border: 1px solid red !important;
+}
+
+

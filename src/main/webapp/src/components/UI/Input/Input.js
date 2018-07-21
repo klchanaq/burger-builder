@@ -2,26 +2,42 @@ import React from "react";
 import "./Input.css";
 
 const input = function(props) {
-  const { label, elementType, elementConfig, value, changed } = props;
+  const { label, elementType, elementConfig, value, invalid, touched, changed } = props;
 
   let inputElement = null;
+
+  // Validty Checking
+  let inValidInput = undefined;
+  if (invalid && touched) {
+    inValidInput = "Input-Invalid";
+  }
 
   switch (elementType) {
     case "input": {
       inputElement = (
-        <input {...elementConfig} value={value} onChange={changed} />
+        <input
+          className={inValidInput}
+          {...elementConfig}
+          value={value}
+          onChange={changed}
+        />
       );
       break;
     }
     case "textarea": {
       inputElement = (
-        <textarea {...elementConfig} value={value} onChange={changed} />
+        <textarea
+          className={inValidInput}
+          {...elementConfig}
+          value={value}
+          onChange={changed}
+        />
       );
       break;
     }
     case "select": {
       inputElement = (
-        <select value={value} onChange={changed}>
+        <select className={inValidInput} value={value} onChange={changed}>
           {elementConfig.options.map(option => (
             <option key={option.value} value={option.value}>
               {option.displayValue}
@@ -32,7 +48,9 @@ const input = function(props) {
       break;
     }
     default:
-      inputElement = <input {...elementConfig} value={value} />;
+      inputElement = (
+        <input className={inValidInput} {...elementConfig} value={value} />
+      );
   }
 
   return (
