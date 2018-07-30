@@ -38,9 +38,9 @@
 
 /* Solution 1 */
 /* 
-  .Input input, 
-  .Input textarea, 
-  .Input select {
+  .Input input.Input-Invalid, 
+  .Input textarea.Input-Invalid, 
+  .Input select.Input-Invalid {
       border: 1px solid red;
   }
 */

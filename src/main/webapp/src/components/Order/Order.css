@@ -5,6 +5,7 @@
   padding: 10px;
   margin: 10px auto;
   box-sizing: border-box;
+  transition: transform 0.2s ease-in-out;
 }
 
 .Order-IngreidentOutput {
@@ -19,7 +20,6 @@
 
 .Order:hover {
   transform: translateY(-3px);
-  transition: 0.2s ease-in-out;
   box-shadow: 0 4px 16px #ccc;
-  border-color:  blue;
+  border-color: blue;
 }
