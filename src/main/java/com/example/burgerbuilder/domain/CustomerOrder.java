@@ -128,7 +128,7 @@ public class CustomerOrder implements Serializable {
         this.price = price;
     }
 
-    public Enum<DELIVERYMETHOD_TYPES> getDeliveryMethod() {
+    public DELIVERYMETHOD_TYPES getDeliveryMethod() {
         return deliveryMethod;
     }
 
