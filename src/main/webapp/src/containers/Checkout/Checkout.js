@@ -17,13 +17,14 @@ class Checkout extends Component {
   };
 
   checkoutContinuedHandler = () => {
-    this.props.history.replace("/checkout/contact-data");
+    this.props.history.replace(this.props.match.path + "/contact-data");
   };
 
   testButtonClick = () => {
     this.props.onInitPurchase();
     // the result would be the same you thought, which is [Checkout.js] > [checkoutSummary] > [burger] > [ContactData]
     // However, you cannot see the update on console.log becuase "Redux" use "ShouldComponentUpdate" to check the mapStateToProps to see whether required states have changed
+    // But you can modify the mapStateToProps on both Checkout & ContactData to let them require the changed props
   };
 
   componentWillMount() {

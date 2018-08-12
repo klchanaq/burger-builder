@@ -149,7 +149,7 @@ class BurgerBuilder extends Component {
     // });
     // this.props.history.push("/checkout");
     this.props.onInitPurchase();
-    this.props.history.push("/checkout");
+    this.props.history.push(this.props.match.path + "/checkout");
   };
 
   componentDidMount() {
