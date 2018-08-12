@@ -8,6 +8,7 @@ const navigationItems = function(props) {
       <NavigationItem link="/" exact>Home</NavigationItem>
       <NavigationItem link="/burgerBuilder">Burger Builder</NavigationItem>
       <NavigationItem link="/orders">Orders</NavigationItem>
+      <NavigationItem link="/auth">Authenticate</NavigationItem>
       {/* <NavigationItem link="/checkout">Checkout</NavigationItem> */}
     </ul>
   );
