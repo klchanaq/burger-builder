@@ -12,7 +12,8 @@ import { connect } from "react-redux";
 import {
   addIngredient,
   removeIngredient,
-  initializeIngredients
+  initializeIngredients,
+  purchaseInit
 } from "../../store/actions/index";
 
 /* 
@@ -147,6 +148,7 @@ class BurgerBuilder extends Component {
     //   search: "?" + queryString
     // });
     // this.props.history.push("/checkout");
+    this.props.onInitPurchase();
     this.props.history.push("/checkout");
   };
 
@@ -222,7 +224,8 @@ const mapDispatchToProps = dispatch => {
   return {
     onIngAdded: ingredientName => dispatch(addIngredient(ingredientName)),
     onIngRemoved: ingredientName => dispatch(removeIngredient(ingredientName)),
-    onIngsInitialized: () => dispatch(initializeIngredients())
+    onIngsInitialized: () => dispatch(initializeIngredients()),
+    onInitPurchase: () => dispatch(purchaseInit())
   };
 };
 

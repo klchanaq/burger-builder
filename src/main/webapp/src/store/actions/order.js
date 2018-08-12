@@ -2,7 +2,10 @@ import {
   PURCHASE_INIT,
   PURCHASE_BURGER_START,
   PURCHASE_BURGER_SUCCESS,
-  PURCHASE_BURGER_FAIL
+  PURCHASE_BURGER_FAIL,
+  FETCH_ORDERS_START,
+  FETCH_ORDERS_SUCCESS,
+  FETCH_ORDERS_FAIL
 } from "./actionTypes";
 import axios from "../../axios-orders";
 
@@ -67,6 +70,58 @@ export const purchaseBurger = newOrderData => {
     //   })
     //   .catch(error => {
     //     console.error("[BurgerBuilder] ", error);
+    //     this.setState({ loading: false });
+    //   });
+  };
+};
+
+const fetchOrdersSuccess = orders => {
+  return {
+    type: FETCH_ORDERS_SUCCESS,
+    orders: orders
+  };
+};
+
+const fetchOrdersFail = error => {
+  return {
+    type: FETCH_ORDERS_FAIL,
+    error: error
+  };
+};
+
+const fetchOrdersStart = () => {
+  return {
+    type: FETCH_ORDERS_START
+  };
+};
+
+export const fetchOrders = () => {
+  return (dispatch, getStore) => {
+    dispatch(fetchOrdersStart());
+    setTimeout(
+      randomNum => {
+        if (randomNum > 0.2) {
+          const response = { data: getStore().order.orders };
+          const fetchedOrders = response.data;
+          dispatch(fetchOrdersSuccess(fetchedOrders));
+        } else {
+          const err = new Error("Failed to Fetch Orders.");
+          dispatch(fetchOrdersFail(err));
+        }
+      },
+      500,
+      Math.random()
+    );
+    // axios
+    //   .get("/api/customerOrders")
+    //   .then(res => {
+    //     const fetchOrders = [];
+    //     for (let key in res.data) {
+    //       fetchOrders.push({ ...res.data[key], id: key });
+    //     }
+    //     this.setState({ loading: false, orders: fetchOrders });
+    //   })
+    //   .catch(err => {
     //     this.setState({ loading: false });
     //   });
   };

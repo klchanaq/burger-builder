@@ -37,10 +37,10 @@ export const initializeIngredients = () => {
       randomNum => {
         if (randomNum > 0.2) {
           const _ingredients = {
-            bacon: 1,
-            cheese: 1,
-            salad: 1,
-            meat: 2
+            bacon: 0,
+            cheese: 0,
+            salad: 0,
+            meat: 0
           };
           dispatch(setIngredients(_ingredients));
         } else {

@@ -22,13 +22,11 @@ class Checkout extends Component {
 
   testButtonClick = () => {
     this.props.onInitPurchase();
-    // the re-rendering result would be the same you thought, which is [Checkout] > [checkoutSummary] > [burger] > [ContactData]
-    // However, you cannot see the update on console.log becuase "Redux" use "shouldComponentUpdate" to check the mapStateToProps to see whether required states have changed
-    // But you can modify the mapStateToProps on both Checkout & ContactData to let them require the changed props
+    // the result would be the same you thought, which is [Checkout.js] > [checkoutSummary] > [burger] > [ContactData]
+    // However, you cannot see the update on console.log becuase "Redux" use "ShouldComponentUpdate" to check the mapStateToProps to see whether required states have changed
   };
 
   componentWillMount() {
-    this.props.onInitPurchase();
     /*
     const querySearchParams = new URLSearchParams(this.props.location.search);
     const _ingredients = {};
@@ -102,13 +100,4 @@ const mapStateToProps = state => {
   };
 };
 
-const mapDispatchToProps = dispatch => {
-  return {
-    onInitPurchase: () => dispatch(purchaseInit())
-  };
-};
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Checkout);
+export default connect(mapStateToProps)(Checkout);
