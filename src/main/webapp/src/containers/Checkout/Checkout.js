@@ -2,8 +2,9 @@ import React, { Component } from "react";
 import "./Checkout.css";
 import { connect } from "react-redux";
 import CheckoutSummary from "../../components/Order/CheckoutSummary/CheckoutSummary";
-import { Route } from "react-router-dom";
+import { Route, Redirect } from "react-router-dom";
 import ContactData from "./ContactData/ContactData";
+import { purchaseInit } from "../../store/actions/index";
 
 class Checkout extends Component {
   // state = {
@@ -19,7 +20,15 @@ class Checkout extends Component {
     this.props.history.replace("/checkout/contact-data");
   };
 
+  testButtonClick = () => {
+    this.props.onInitPurchase();
+    // the re-rendering result would be the same you thought, which is [Checkout] > [checkoutSummary] > [burger] > [ContactData]
+    // However, you cannot see the update on console.log becuase "Redux" use "shouldComponentUpdate" to check the mapStateToProps to see whether required states have changed
+    // But you can modify the mapStateToProps on both Checkout & ContactData to let them require the changed props
+  };
+
   componentWillMount() {
+    this.props.onInitPurchase();
     /*
     const querySearchParams = new URLSearchParams(this.props.location.search);
     const _ingredients = {};
@@ -42,8 +51,16 @@ class Checkout extends Component {
 
   render() {
     console.log("[Checkout] render()...", this.props);
+    const isIngsExisted = this.props.ings;
+    if (!isIngsExisted) {
+      return <Redirect to="/" />;
+    }
+    if (this.props.purchased) {
+      return <Redirect to="/" />;
+    }
     return (
       <div className="Checkout">
+        <button onClick={this.testButtonClick}>Test Batch Update</button>
         <CheckoutSummary
           ingredients={this.props.ings}
           checkoutCancelled={this.checkoutCancelledHandler}
@@ -80,8 +97,18 @@ class Checkout extends Component {
 
 const mapStateToProps = state => {
   return {
-    ings: state.ingredients
+    ings: state.burgerBuilder.ingredients,
+    purchased: state.order.purchased
   };
 };
 
-export default connect(mapStateToProps)(Checkout);
+const mapDispatchToProps = dispatch => {
+  return {
+    onInitPurchase: () => dispatch(purchaseInit())
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Checkout);

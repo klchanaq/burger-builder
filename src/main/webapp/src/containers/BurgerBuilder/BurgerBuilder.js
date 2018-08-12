@@ -9,7 +9,11 @@ import axios from "../../axios-orders";
 import Spinner from "../../components/UI/Spinner/Spinner";
 import withErrorHandler from "../../hoc/withErrorHandler/withErrorHandler";
 import { connect } from "react-redux";
-import { addIngredient, removeIngredient, initializeIngredients } from "../../store/actions/index";
+import {
+  addIngredient,
+  removeIngredient,
+  initializeIngredients
+} from "../../store/actions/index";
 
 /* 
   function incrementIngsHandler(number) {
@@ -147,7 +151,6 @@ class BurgerBuilder extends Component {
   };
 
   componentDidMount() {
-    console.log(this.props);
     this.props.onIngsInitialized();
   }
 
@@ -209,9 +212,9 @@ class BurgerBuilder extends Component {
 
 const mapStateToProps = state => {
   return {
-    ings: state.ingredients,
-    totalPrice: state.totalPrice,
-    error: state.error
+    ings: state.burgerBuilder.ingredients,
+    totalPrice: state.burgerBuilder.totalPrice,
+    error: state.burgerBuilder.error
   };
 };
 
