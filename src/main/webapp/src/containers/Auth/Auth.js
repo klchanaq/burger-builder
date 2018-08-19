@@ -1,7 +1,12 @@
 import React, { Component } from "react";
 import "./Auth.css";
+
+import { connect } from "react-redux";
+import { auth } from "../../store/actions/index";
+
 import Input from "../../components/UI/Input/Input";
 import Button from "../../components/UI/Button/Button";
+import Spinner from "../../components/UI/Spinner/Spinner";
 
 function checkValidity(value, rules = {}) {
   let isValid = true; // true at this moment in order to solve the common validation gotcha
@@ -64,7 +69,8 @@ class Auth extends Component {
         touched: false
       }
     },
-    isLoginFormValid: false
+    isLoginFormValid: false,
+    loginStatus: "Sign-up" // "Sign-up" / "Sign-in"
   };
 
   inputChangedHandler = ($event, controlName) => {
@@ -95,33 +101,87 @@ class Auth extends Component {
 
   loginHandler = $event => {
     $event.preventDefault();
+    const {
+      email: emailControl,
+      password: passwordControl
+    } = this.state.controls;
+
+    if (this.state.loginStatus === "Sign-up") {
+      console.log("Sign-up Process");
+      this.props.onAuth(emailControl.value, passwordControl.value, "Sign-up");
+    } else {
+      console.log("Sign-in Process");
+      this.props.onAuth(emailControl.value, passwordControl.value, "Sign-in");
+    }
+  };
+
+  loginStatusSwitchedHandler = $event => {
+    this.setState(prevState => {
+      return {
+        loginStatus: prevState.loginStatus === "Sign-up" ? "Sign-in" : "Sign-up"
+      };
+    });
   };
 
   render() {
+    let formControls = Object.entries(this.state.controls).map(
+      ([key, formEl]) => {
+        return (
+          <Input
+            key={key}
+            label={formEl.label}
+            elementType={formEl.elementType}
+            elementConfig={formEl.elementConfig}
+            value={formEl.value}
+            invalid={!formEl.valid}
+            touched={formEl.touched}
+            changed={e => this.inputChangedHandler(e, key)}
+          />
+        );
+      }
+    );
+    if (this.props.loading) {
+      formControls = <Spinner show />;
+    }
+
+    let errorMsg = this.props.error && (
+      <h3 style={{ color: "red" }}>Invalid Login Information.</h3>
+    );
+
     return (
       <div className="Auth">
         <form onSubmit={this.loginHandler}>
-          {Object.entries(this.state.controls).map(([key, formEl]) => {
-            return (
-              <Input
-                key={key}
-                label={formEl.label}
-                elementType={formEl.elementType}
-                elementConfig={formEl.elementConfig}
-                value={formEl.value}
-                invalid={!formEl.valid}
-                touched={formEl.touched}
-                changed={e => this.inputChangedHandler(e, key)}
-              />
-            );
-          })}
+          {errorMsg}
+          <h3>{this.state.loginStatus}</h3>
+          {formControls}
           <Button btnType="Success" disabled={!this.state.isLoginFormValid}>
             Submit
           </Button>
         </form>
+        <Button btnType="Danger" clicked={this.loginStatusSwitchedHandler}>
+          Switch To{" "}
+          {this.state.loginStatus === "Sign-up" ? "Sign-in" : "Sign-up"}
+        </Button>
       </div>
     );
   }
 }
 
-export default Auth;
+const mapStateToProps = state => {
+  return {
+    loading: state.auth.loading,
+    error: state.auth.error
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    onAuth: (email, password, loginStatus) =>
+      dispatch(auth(email, password, loginStatus))
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Auth);
