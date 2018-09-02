@@ -22,7 +22,10 @@ import java.util.Objects;
  *             customerOrder.customerName(null).ingredients(new Ingredients(1,2,1,3)) // OK
  *             customerOrderService.save(customerOrder) // Error!
  *             error because on the preInsert() method provided by Hibernate, it will call validate() method to check the customerOrder object's fields
- * Reminder 4: Hibernate will use the setters, getters, default constructor to do its jobs
+ * Reminder 4: If you mark @Id & @GeneratedValue on Fields,
+ *             Hibernate will not use the setters, getters, default constructor to do its jobs.
+ *             If you mark @Id & @GeneratedValue on getters, Hibernate will use the setters, getters, default constructor to do its jobs.
+ *             Please refer to another project regarding Hibernate, JPA & Jackson.
  * */
 
 @Entity

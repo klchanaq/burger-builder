@@ -12,8 +12,14 @@ import org.zalando.problem.validation.ConstraintViolationProblemModule;
 public class SerializationConfig {
 
     /*
-     * Support for Hibernate types in Jackson, for turn off lazy-loading on Jackson
-     */
+    * Support for Hibernate types in Jackson, for turn off lazy-loading on Jackson
+    * Notes: Jackson will map POJOs eagerly by default ( iterate through the List Proxy even it is marked with LAZY ).
+    *        Hibernate5Module will look into the Annotations to see whether the annotation is considered LAZY LOADING.
+    *        Skip its serialization process if Jackson finds the LAZY LOADING information.
+    *        Jackson will not provide Session Creation, Transaction Opening for LAZY LOADING Serialization/Deserialization.
+    *        The jobs Session Creation, Transaction Opening for LAZY LOADING Serialization/Deserialization is done by Spring's OpenSessionInView.
+    */
+
     @Bean
     public Hibernate5Module hibernate5Module() {
         return new Hibernate5Module();
