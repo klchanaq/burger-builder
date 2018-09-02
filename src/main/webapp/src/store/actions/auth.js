@@ -1,4 +1,9 @@
-import { AUTH_START, AUTH_SUCCESS, AUTH_FAIL } from "./actionTypes";
+import {
+  AUTH_START,
+  AUTH_SUCCESS,
+  AUTH_FAIL,
+  AUTH_LOGOUT
+} from "./actionTypes";
 import axios from "axios";
 
 /* JavaScript Closure Function */
@@ -52,6 +57,23 @@ const authFail = error => {
   };
 };
 
+const authLogout = () => {
+  return {
+    type: AUTH_LOGOUT
+  };
+};
+
+const checkAuthTimeout = expirationTime => {
+  // return a dispatch function inside another dispatch function (function: auth), why ?
+  // We want to do some async tasks here using redux-thunk, and the returned result will be handled by dispatch([action]).
+  // in normal cases, redux-thunk's dispatch([action]) handles an action (in the format of { type, payload }) and dispatch function (in the format of (dispatch) => {}).
+  return dispatch => {
+    setTimeout(() => {
+      dispatch(authLogout());
+    }, Number(expirationTime) * 1000);
+  };
+};
+
 export const auth = (email, password, loginStatus) => {
   return dispatch => {
     dispatch(authStart());
@@ -87,6 +109,7 @@ export const auth = (email, password, loginStatus) => {
           const fakedAuthData = response.data;
           console.log("fakedAuthData: ", fakedAuthData);
           dispatch(authSuccess(fakedAuthData));
+          dispatch(checkAuthTimeout(fakedAuthData.expiresIn)); // another async task here.
         } else {
           const err = new Error("Failed to " + loginStatus + " User.");
           console.log(err);

@@ -61,7 +61,7 @@ export const purchaseBurger = newOrderData => {
       500,
       Math.random()
     );
-
+    // TODO: React Complete Guide 317+ : Add idToken for protected resources as RequestParams ( ?auth=xyz ).
     // axios
     //   .post("/api/customerOrders", order)
     //   .then(response => {
@@ -112,6 +112,7 @@ export const fetchOrders = () => {
       500,
       Math.random()
     );
+    // TODO: React Complete Guide 317+ : Add idToken for protected resources as RequestParams ( ?auth=xyz ).
     // axios
     //   .get("/api/customerOrders")
     //   .then(res => {
