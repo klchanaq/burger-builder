@@ -1,6 +1,7 @@
 package com.example.burgerbuilder.service;
 
 import com.example.burgerbuilder.domain.CustomerOrder;
+import com.example.burgerbuilder.repository.CustomerOrderDAO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -21,8 +22,11 @@ public class CustomerOrderServiceImpl implements CustomerOrderService {
 
     private final CustomerOrderRepository CustomerOrderRepository;
 
-    public CustomerOrderServiceImpl(CustomerOrderRepository CustomerOrderRepository) {
+    private final CustomerOrderDAO customerOrderDAO;
+
+    public CustomerOrderServiceImpl(CustomerOrderRepository CustomerOrderRepository, CustomerOrderDAO customerOrderDAO) {
         this.CustomerOrderRepository = CustomerOrderRepository;
+        this.customerOrderDAO = customerOrderDAO;
     }
 
     /**

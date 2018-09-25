@@ -1,6 +1,7 @@
 package com.example.burgerbuilder.service;
 
 import com.example.burgerbuilder.domain.Customer;
+import com.example.burgerbuilder.repository.CustomerDAO;
 import com.example.burgerbuilder.repository.CustomerRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,8 +22,11 @@ public class CustomerServiceImpl implements CustomerService {
 
     private final CustomerRepository customerRepository;
 
-    public CustomerServiceImpl(CustomerRepository customerRepository) {
+    private final CustomerDAO customerDAO;
+
+    public CustomerServiceImpl(CustomerRepository customerRepository, CustomerDAO customerDAO) {
         this.customerRepository = customerRepository;
+        this.customerDAO = customerDAO;
     }
 
     /**

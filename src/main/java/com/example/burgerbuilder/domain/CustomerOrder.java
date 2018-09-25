@@ -61,8 +61,8 @@ public class CustomerOrder implements Serializable {
     private DELIVERYMETHOD_TYPES deliveryMethod = DELIVERYMETHOD_TYPES.NOT_SPECIFIC; // Don't use Enum<T> here!
 
     @NotNull
-    @ManyToOne(optional = false,
-            cascade = { CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @ManyToOne(optional = false)
+            //cascade = { CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}
     @JoinColumn(name = "customer_id")
     @JsonIgnoreProperties(value = {"customerOrders"}) // Learned from Jhipster on 18-07-2018, or value = "" for general purpose
     //@JsonBackReference
