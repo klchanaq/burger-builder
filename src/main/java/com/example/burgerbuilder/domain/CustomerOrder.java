@@ -149,16 +149,12 @@ public class CustomerOrder implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         CustomerOrder that = (CustomerOrder) o;
-        return Objects.equals(id, that.id) &&
-                Objects.equals(ingredients, that.ingredients) &&
-                Objects.equals(price, that.price) &&
-                Objects.equals(deliveryMethod, that.deliveryMethod) &&
-                Objects.equals(customer, that.customer);
+        return Objects.equals(id, that.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, ingredients, price, deliveryMethod, customer);
+        return Objects.hash(id);
     }
 
     @Override

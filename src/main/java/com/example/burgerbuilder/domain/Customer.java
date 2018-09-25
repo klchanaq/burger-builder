@@ -11,8 +11,8 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Objects;
 
 @Entity
@@ -44,7 +44,7 @@ public class Customer implements Serializable {
     @OneToMany(mappedBy = "customer", cascade = {CascadeType.ALL})
     //@JsonManagedReference
     //@JsonBackReference
-    private List<CustomerOrder> customerOrders = new ArrayList<>();
+    private Set<CustomerOrder> customerOrders = new HashSet<>();
 
     public Customer() {
     }
@@ -53,7 +53,7 @@ public class Customer implements Serializable {
                     @NotNull @Size(min = 0, max = 30) String name,
                     @NotNull @Email @Size(min = 5, max = 254) String email,
                     @NotNull Address address,
-                    List<CustomerOrder> customerOrders) {
+                    Set<CustomerOrder> customerOrders) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -108,16 +108,16 @@ public class Customer implements Serializable {
         this.address = address;
     }
 
-    public List<CustomerOrder> getCustomerOrders() {
+    public Set<CustomerOrder> getCustomerOrders() {
         return customerOrders;
     }
 
-    public Customer customerOrders(List<CustomerOrder> customerOrders) {
+    public Customer customerOrders(Set<CustomerOrder> customerOrders) {
         this.customerOrders = customerOrders;
         return this;
     }
 
-    public void setCustomerOrders(List<CustomerOrder> customerOrders) {
+    public void setCustomerOrders(Set<CustomerOrder> customerOrders) {
         this.customerOrders = customerOrders;
     }
 
@@ -137,17 +137,13 @@ public class Customer implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Customer customer = (Customer) o;
-        return Objects.equals(id, customer.id) &&
-                Objects.equals(name, customer.name) &&
-                Objects.equals(email, customer.email) &&
-                Objects.equals(address, customer.address) &&
-                Objects.equals(customerOrders, customer.customerOrders);
+        Customer that = (Customer) o;
+        return Objects.equals(id, that.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, email, address, customerOrders);
+        return Objects.hash(id);
     }
 
     @Override

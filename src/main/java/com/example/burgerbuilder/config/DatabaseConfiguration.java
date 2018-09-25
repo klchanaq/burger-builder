@@ -22,7 +22,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
+import java.util.HashSet;
 
 @Configuration
 @EnableJpaRepositories("com.example.burgerbuilder.repository")
@@ -63,7 +63,7 @@ public class DatabaseConfiguration {
                 System.out.println("Instant.now() = " + Instant.now());
 
                 Customer hkcustomer = new Customer();
-                hkcustomer.setCustomerOrders(new ArrayList<>());
+                hkcustomer.setCustomerOrders(new HashSet<>());
                 Address hkcustomerAddress = new Address();
                 hkcustomerAddress.country("HK").street("HK Street");
                 CustomerOrder hkcustomerOrder1 = new CustomerOrder();
@@ -84,7 +84,7 @@ public class DatabaseConfiguration {
                 customerService.save(hkcustomer);
 
                 Customer germanCustomer = new Customer();
-                germanCustomer.setCustomerOrders(new ArrayList<>());
+                germanCustomer.setCustomerOrders(new HashSet<>());
                 Address germanCustomerAddress = new Address();
                 germanCustomerAddress.country("Germany").street("Germany Street");
                 germanCustomer.name("germanCustomer").email("germanCustomer@gmail.com").address(germanCustomerAddress);
