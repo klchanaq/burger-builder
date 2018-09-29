@@ -39,9 +39,12 @@ const reducer = (state = initialState, action) => {
         totalPrice: state.totalPrice - INGREDIENT_PRICES[action.ingredientName]
       };
     case SET_INGREDIENTS: {
+      // determine whether the user has saved ingredients changes.
+      // if global state ingredients have been initialized, then simply use it, set the ingredients otherwise.
+      const initialOrSubsequentIngs = state.ingredients || action.ingredients; 
       const calculatedTotalPrice =
         initialState.totalPrice +
-        Object.entries(action.ingredients)
+        Object.entries(initialOrSubsequentIngs)
           .map(([key, value]) => {
             return INGREDIENT_PRICES[key] * value;
           })
@@ -50,7 +53,7 @@ const reducer = (state = initialState, action) => {
           }, 0);
       return {
         ...state,
-        ingredients: action.ingredients,
+        ingredients: initialOrSubsequentIngs,
         totalPrice: calculatedTotalPrice,
         error: false // reset the 'error'
       };
