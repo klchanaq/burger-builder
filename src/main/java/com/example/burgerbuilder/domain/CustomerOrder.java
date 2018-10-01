@@ -3,10 +3,13 @@ package com.example.burgerbuilder.domain;
 import com.example.burgerbuilder.domain.EmbeddedDomain.Ingredients;
 import com.example.burgerbuilder.domain.enumeration.DELIVERYMETHOD_TYPES;
 import com.fasterxml.jackson.annotation.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 /*
@@ -53,6 +56,12 @@ public class CustomerOrder implements Serializable {
     //@Max(20)
     @Column(nullable = false)
     private Float price;
+
+    @CreationTimestamp
+    private LocalDateTime createdDateTime;
+
+    @UpdateTimestamp
+    private LocalDateTime updatedDateTime;
 
     @NotNull
     // Learned from Jhipster on 18-07-2018, For passing String (e.g. deliveryMetod: "FASTEST") at frontend to @RequestBody at Spring

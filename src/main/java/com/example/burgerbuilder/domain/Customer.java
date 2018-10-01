@@ -5,12 +5,14 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Objects;
@@ -40,6 +42,9 @@ public class Customer implements Serializable {
     @NotNull
     @Embedded
     private Address address;
+
+    @UpdateTimestamp
+    private LocalDate updatedDate;
 
     @OneToMany(mappedBy = "customer", cascade = {CascadeType.ALL})
     //@JsonManagedReference
