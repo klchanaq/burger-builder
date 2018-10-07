@@ -71,27 +71,12 @@ public class CustomerOrder implements Serializable {
 
     @NotNull
     @ManyToOne(optional = false)
-            //cascade = { CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}
+    //cascade = { CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}
     @JoinColumn(name = "customer_id")
     @JsonIgnoreProperties(value = {"customerOrders"}) // Learned from Jhipster on 18-07-2018, or value = "" for general purpose
     //@JsonBackReference
     //@JsonManagedReference
     private Customer customer;
-
-    public CustomerOrder() {
-    }
-
-    public CustomerOrder(Long id,
-                         @NotNull Ingredients ingredients,
-                         @NotNull @DecimalMin(value = "0") @DecimalMax(value = "20") Float price,
-                         @NotNull DELIVERYMETHOD_TYPES deliveryMethod,
-                         @NotNull Customer customer) {
-        this.id = id;
-        this.ingredients = ingredients;
-        this.price = price;
-        this.deliveryMethod = deliveryMethod;
-        this.customer = customer;
-    }
 
     public Long getId() {
         return id;

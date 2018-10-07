@@ -4,6 +4,7 @@ import org.springframework.beans.factory.BeanInitializationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -14,6 +15,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.annotation.PostConstruct;
@@ -30,6 +32,7 @@ import javax.sql.DataSource;
  *   5. Actually, in Spring Boot Auto Config, the annotation @EnableWebSecurity is optional,
  *      because class SecurityAutoConfiguration imports SpringBootWebSecurityConfiguration.class, WebSecurityEnablerConfiguration.class,
  *      SecurityDataConfiguration.class . WebSecurityEnablerConfiguration is marked with @EnableWebSecurity & @Configuration
+ *   6. jdbcAuthentication will erase the existing dataSource, so you need to manually add dataSource() after it.
  * */
 
 @Configuration
@@ -39,17 +42,23 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
+    private final DataSource dataSource;
+
     // Don't add the default constructor if you intend to mark the instance members final, otherwise it throws exception.
     // public SecurityConfiguration() { }
-    public SecurityConfiguration(AuthenticationManagerBuilder authenticationManagerBuilder) {
+    public SecurityConfiguration(AuthenticationManagerBuilder authenticationManagerBuilder, DataSource dataSource) {
         this.authenticationManagerBuilder = authenticationManagerBuilder;
+        this.dataSource = dataSource;
     }
 
     @PostConstruct
     public void init() {
         // configure authenticationManagerBuilder & userDetailService here.
         try {
-            // authenticationManagerBuilder.jdbcAuthentication().passwordEncoder(passwordEncoder());
+            authenticationManagerBuilder
+                    .jdbcAuthentication()
+                    .dataSource(dataSource)// Refer to #6
+                    .passwordEncoder(spring4PasswordEncoder());
         } catch (Exception e) {
             throw new BeanInitializationException("Security configuration failed", e);
         }
@@ -61,16 +70,20 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         // configure authenticationManagerBuilder & userDetailService here.
     }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        // return PasswordEncoderFactories.createDelegatingPasswordEncoder(); // this is for Spring Security 5
+    @Bean(name = "noOpPasswordEncoder")
+    @Primary
+    public PasswordEncoder noOpPasswordEncoder() {
+        return NoOpPasswordEncoder.getInstance(); // this is for demo purpose.
+    }
+
+    @Bean(name = "spring4PasswordEncoder")
+    public PasswordEncoder spring4PasswordEncoder() {
         return new BCryptPasswordEncoder(); // for Spring Security 4, simply return BCrypt Password Encoder
     }
 
-    @Override
-    @Bean
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
+    @Bean(name = "spring5PasswordEncoder")
+    public PasswordEncoder spring5PasswordEncoder() {
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder(); // this is for Spring Security 5
     }
 
     @Override

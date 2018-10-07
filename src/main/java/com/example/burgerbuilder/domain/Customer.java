@@ -1,10 +1,7 @@
 package com.example.burgerbuilder.domain;
 
 import com.example.burgerbuilder.domain.EmbeddedDomain.Address;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.*;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
@@ -29,15 +26,16 @@ public class Customer implements Serializable {
     private Long id;
 
     @NotNull
-    @Size(min = 0, max = 30)
-    @Column(nullable = false)
-    private String name;
-
-    @NotNull
     @Email
     @Size(min = 5, max = 254)
     @Column(nullable = false, length = 254, unique = true)
     private String email;
+
+    @JsonIgnore
+    @NotNull
+    @Size(min = 60, max = 60)
+    @Column(name = "password_hash", length = 60, nullable = false)
+    private String password;
 
     @NotNull
     @Embedded
@@ -51,40 +49,12 @@ public class Customer implements Serializable {
     //@JsonBackReference
     private Set<CustomerOrder> customerOrders = new HashSet<>();
 
-    public Customer() {
-    }
-
-    public Customer(Long id,
-                    @NotNull @Size(min = 0, max = 30) String name,
-                    @NotNull @Email @Size(min = 5, max = 254) String email,
-                    @NotNull Address address,
-                    Set<CustomerOrder> customerOrders) {
-        this.id = id;
-        this.name = name;
-        this.email = email;
-        this.address = address;
-        this.customerOrders = customerOrders;
-    }
-
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public Customer name(String name) {
-        this.name = name;
-        return this;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getEmail() {
@@ -98,6 +68,19 @@ public class Customer implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public Customer password(String password) {
+        this.password = password;
+        return this;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public Address getAddress() {
@@ -155,7 +138,6 @@ public class Customer implements Serializable {
     public String toString() {
         return "Customer{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 ", address=" + address +
                 // ", customerOrders=" + customerOrders +
