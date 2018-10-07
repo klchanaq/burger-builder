@@ -1,10 +1,12 @@
 package com.example.burgerbuilder.config;
 
+import com.example.burgerbuilder.domain.Authority;
 import com.example.burgerbuilder.domain.Customer;
 import com.example.burgerbuilder.domain.CustomerOrder;
 import com.example.burgerbuilder.domain.EmbeddedDomain.Address;
 import com.example.burgerbuilder.domain.EmbeddedDomain.Ingredients;
 import com.example.burgerbuilder.domain.enumeration.DELIVERYMETHOD_TYPES;
+import com.example.burgerbuilder.repository.AuthorityRepository;
 import com.example.burgerbuilder.service.AuthorService;
 import com.example.burgerbuilder.service.CustomerOrderService;
 import com.example.burgerbuilder.service.CustomerService;
@@ -37,16 +39,30 @@ public class DatabaseConfiguration {
     @Bean
     CommandLineRunner commandLineRunner(AuthorService authorService,
                                         CustomerService customerService,
+                                        AuthorityRepository authorityRepository,
                                         @Qualifier(value = "spring4PasswordEncoder") PasswordEncoder passwordEncoder,
                                         CustomerOrderService customerOrderService) {
         return new CommandLineRunner() {
             @Override
             public void run(String... args) throws Exception {
 
+                Authority role_admin = new Authority();
+                role_admin.setName("ROLE_ADMIN");
+
+                Authority role_user = new Authority();
+                role_user.setName("ROLE_USER");
+
+                authorityRepository.save(role_admin);
+                authorityRepository.saveAndFlush(role_user);
+
                 Customer bob = new Customer();
-                bob.setCustomerOrders(new HashSet<>());
                 Address bobAddress = new Address();
                 bobAddress.country("HK").street("HK Street");
+                bob.email("bob@gmail.com")
+                        .password(passwordEncoder.encode("bob"))
+                        .address(bobAddress);
+
+                bob.addAuthorities(role_admin).addAuthorities(role_user);
 
                 CustomerOrder bobOrder1 = new CustomerOrder();
                 bobOrder1
@@ -61,21 +77,18 @@ public class DatabaseConfiguration {
                         .deliveryMethod(DELIVERYMETHOD_TYPES.FASTEST)
                         .customer(bob);
 
-                bob.email("bob@gmail.com")
-                        .password(passwordEncoder.encode("bob"))
-                        .address(bobAddress);
-
                 bob.addCustomerOrders(bobOrder1).addCustomerOrders(bobOrder2);
                 customerService.save(bob);
 
                 Customer sara = new Customer();
-                sara.setCustomerOrders(new HashSet<>());
                 Address saraAddress = new Address();
                 saraAddress.country("Germany").street("Germany Street");
                 sara
                         .email("sara@gmail.com")
                         .password(passwordEncoder.encode("sara"))
                         .address(saraAddress);
+
+                sara.addAuthorities(role_user);
 
                 CustomerOrder saraOrder1 = new CustomerOrder();
                 saraOrder1

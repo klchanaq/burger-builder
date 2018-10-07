@@ -31,7 +31,6 @@ public class Customer implements Serializable {
     @Column(nullable = false, length = 254, unique = true)
     private String email;
 
-    @JsonIgnore
     @NotNull
     @Size(min = 60, max = 60)
     @Column(name = "password_hash", length = 60, nullable = false)
@@ -43,6 +42,13 @@ public class Customer implements Serializable {
 
     @UpdateTimestamp
     private LocalDate updatedDate;
+
+    @ManyToMany
+    @JoinTable(
+            name = "customer_authority",
+            joinColumns = {@JoinColumn(name = "customer_id", referencedColumnName = "id")},
+            inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "name")})
+    private Set<Authority> authorities = new HashSet<>();
 
     @OneToMany(mappedBy = "customer", cascade = {CascadeType.ALL})
     //@JsonManagedReference
@@ -94,6 +100,29 @@ public class Customer implements Serializable {
 
     public void setAddress(Address address) {
         this.address = address;
+    }
+
+    public Set<Authority> getAuthorities() {
+        return authorities;
+    }
+
+    public Customer authorities(Set<Authority> authorities) {
+        this.authorities = authorities;
+        return this;
+    }
+
+    public void setAuthorities(Set<Authority> authorities) {
+        this.authorities = authorities;
+    }
+
+    public Customer addAuthorities(Authority authority) {
+        this.authorities.add(authority);
+        return this;
+    }
+
+    public Customer removeAuthorities(Authority authority) {
+        this.authorities.remove(authority);
+        return this;
     }
 
     public Set<CustomerOrder> getCustomerOrders() {
