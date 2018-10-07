@@ -6,13 +6,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
@@ -44,11 +44,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final DataSource dataSource;
 
+    private final UserDetailsService userDetailsService;
+
     // Don't add the default constructor if you intend to mark the instance members final, otherwise it throws exception.
     // public SecurityConfiguration() { }
-    public SecurityConfiguration(AuthenticationManagerBuilder authenticationManagerBuilder, DataSource dataSource) {
+    public SecurityConfiguration(AuthenticationManagerBuilder authenticationManagerBuilder, DataSource dataSource, UserDetailsService userDetailsService) {
         this.authenticationManagerBuilder = authenticationManagerBuilder;
         this.dataSource = dataSource;
+        this.userDetailsService = userDetailsService;
     }
 
     @PostConstruct
@@ -56,9 +59,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         // configure authenticationManagerBuilder & userDetailService here.
         try {
             authenticationManagerBuilder
-                    .jdbcAuthentication()
-                    .dataSource(dataSource)// Refer to #6
+                    .userDetailsService(userDetailsService) // This will activate DaoAuthentication by default
                     .passwordEncoder(spring4PasswordEncoder());
+            //authenticationManagerBuilder
+            //        .jdbcAuthentication()
+            //        .dataSource(dataSource)// Refer to #6
+            //        .passwordEncoder(spring4PasswordEncoder());
         } catch (Exception e) {
             throw new BeanInitializationException("Security configuration failed", e);
         }
