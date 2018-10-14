@@ -36,7 +36,6 @@ public class Customer implements Serializable {
     @Column(name = "password_hash", length = 60, nullable = false)
     private String password;
 
-    @NotNull
     @Embedded
     private Address address;
 

@@ -12,11 +12,9 @@ public class Address implements Serializable {
 
     private static final long serialVersionUID = 22561924L;
 
-    @NotNull
     @Column(nullable = false)
     private String country;
 
-    @NotNull
     @Column(nullable = false)
     private String street;
 

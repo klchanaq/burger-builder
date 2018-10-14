@@ -1,4 +1,4 @@
-package com.example.burgerbuilder.service;
+package com.example.burgerbuilder.security;
 
 import com.example.burgerbuilder.domain.Customer;
 import com.example.burgerbuilder.repository.CustomerRepository;
@@ -45,6 +45,7 @@ public class DomainUserDetailsService implements UserDetailsService {
     }
 
     private User createSpringSecurityUser(Customer customer) {
+        log.debug("Creating Spring Security User {}", customer);
         List<GrantedAuthority> grantedAuthorities =
                 customer.getAuthorities().stream()
                         .map(authority -> new SimpleGrantedAuthority(authority.getName()))
