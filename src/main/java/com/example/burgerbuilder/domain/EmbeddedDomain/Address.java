@@ -2,7 +2,6 @@ package com.example.burgerbuilder.domain.EmbeddedDomain;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Objects;
@@ -12,26 +11,15 @@ public class Address implements Serializable {
 
     private static final long serialVersionUID = 22561924L;
 
-    @Column(nullable = false)
+    @Column
     private String country;
 
-    @Column(nullable = false)
+    @Column
     private String street;
 
     @Size(min = 0, max = 20)
-    @Column(nullable = true)
+    @Column
     private String zipCode;
-
-    public Address() {
-    }
-
-    public Address(@NotNull String country,
-                   @NotNull String street,
-                   @Size(min = 0, max = 20) String zipCode) {
-        this.country = country;
-        this.street = street;
-        this.zipCode = zipCode;
-    }
 
     public String getCountry() {
         return country;

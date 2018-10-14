@@ -58,6 +58,12 @@ public class CustomerServiceImpl implements CustomerService {
         return customerRepository.save(customer);
     }
 
+    /**
+     * Save a customer.
+     *
+     * @param customer the entity to save
+     * @return the persisted entity
+     */
     @Override
     public Customer saveWithDemoData(Customer customer) {
         log.debug("Request to save Customer : {}", customer);
