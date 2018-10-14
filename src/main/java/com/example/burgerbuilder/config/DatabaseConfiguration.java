@@ -7,6 +7,7 @@ import com.example.burgerbuilder.domain.EmbeddedDomain.Address;
 import com.example.burgerbuilder.domain.EmbeddedDomain.Ingredients;
 import com.example.burgerbuilder.domain.enumeration.DELIVERYMETHOD_TYPES;
 import com.example.burgerbuilder.repository.AuthorityRepository;
+import com.example.burgerbuilder.security.AuthoritiesConstants;
 import com.example.burgerbuilder.service.AuthorService;
 import com.example.burgerbuilder.service.CustomerOrderService;
 import com.example.burgerbuilder.service.CustomerService;
@@ -47,10 +48,10 @@ public class DatabaseConfiguration {
             public void run(String... args) throws Exception {
 
                 Authority role_admin = new Authority();
-                role_admin.setName("ROLE_ADMIN");
+                role_admin.setName(AuthoritiesConstants.ADMIN);
 
                 Authority role_user = new Authority();
-                role_user.setName("ROLE_USER");
+                role_user.setName(AuthoritiesConstants.USER);
 
                 authorityRepository.save(role_admin);
                 authorityRepository.saveAndFlush(role_user);
@@ -78,7 +79,7 @@ public class DatabaseConfiguration {
                         .customer(bob);
 
                 bob.addCustomerOrders(bobOrder1).addCustomerOrders(bobOrder2);
-                customerService.save(bob);
+                customerService.saveWithDemoData(bob);
 
                 Customer sara = new Customer();
                 Address saraAddress = new Address();
@@ -104,7 +105,7 @@ public class DatabaseConfiguration {
                         .customer(sara);
 
                 sara.addCustomerOrders(saraOrder1).addCustomerOrders(saraOrder2);
-                customerService.save(sara);
+                customerService.saveWithDemoData(sara);
 
             }
         };

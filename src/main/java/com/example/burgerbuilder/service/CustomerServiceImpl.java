@@ -1,15 +1,21 @@
 package com.example.burgerbuilder.service;
 
+import com.example.burgerbuilder.domain.Authority;
 import com.example.burgerbuilder.domain.Customer;
 import com.example.burgerbuilder.repository.CustomerDAO;
 import com.example.burgerbuilder.repository.CustomerRepository;
+import com.example.burgerbuilder.security.AuthoritiesConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * Service Implementation for managing Customer.
@@ -24,9 +30,14 @@ public class CustomerServiceImpl implements CustomerService {
 
     private final CustomerDAO customerDAO;
 
-    public CustomerServiceImpl(CustomerRepository customerRepository, CustomerDAO customerDAO) {
+    private final PasswordEncoder passwordEncoder;
+
+    public CustomerServiceImpl(CustomerRepository customerRepository,
+                               CustomerDAO customerDAO,
+                               @Qualifier("spring4PasswordEncoder") PasswordEncoder passwordEncoder) {
         this.customerRepository = customerRepository;
         this.customerDAO = customerDAO;
+        this.passwordEncoder = passwordEncoder;
     }
 
     /**
@@ -37,6 +48,18 @@ public class CustomerServiceImpl implements CustomerService {
      */
     @Override
     public Customer save(Customer customer) {
+        log.debug("Request to save Customer : {}", customer);
+        customer.setPassword(passwordEncoder.encode(customer.getPassword()));
+        Set<Authority> authorities = new HashSet<>();
+        Authority authority = new Authority();
+        authority.setName(AuthoritiesConstants.USER);
+        authorities.add(authority);
+        customer.setAuthorities(authorities);
+        return customerRepository.save(customer);
+    }
+
+    @Override
+    public Customer saveWithDemoData(Customer customer) {
         log.debug("Request to save Customer : {}", customer);
         return customerRepository.save(customer);
     }

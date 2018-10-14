@@ -19,6 +19,14 @@ public interface CustomerService {
     Customer save(Customer customer);
 
     /**
+     * Save a customer.
+     *
+     * @param customer the demo entity to save
+     * @return the persisted entity
+     */
+    Customer saveWithDemoData(Customer customer);
+
+    /**
      * Get all the customers.
      *
      * @return the collection of entities
