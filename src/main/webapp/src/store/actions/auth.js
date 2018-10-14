@@ -4,7 +4,7 @@ import {
   AUTH_FAIL,
   AUTH_LOGOUT
 } from "./actionTypes";
-import axios from "axios";
+import axios from "../../axios-orders";
 
 /* JavaScript Closure Function */
 function generateFakeUser() {
