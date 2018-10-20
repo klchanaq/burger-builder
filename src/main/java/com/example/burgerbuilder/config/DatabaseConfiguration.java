@@ -60,7 +60,7 @@ public class DatabaseConfiguration {
                 Address bobAddress = new Address();
                 bobAddress.country("HK").street("HK Street");
                 bob.email("bob@gmail.com")
-                        .password(passwordEncoder.encode("bob"))
+                        .password(passwordEncoder.encode("123456"))
                         .address(bobAddress);
 
                 bob.addAuthorities(role_admin).addAuthorities(role_user);
@@ -86,7 +86,7 @@ public class DatabaseConfiguration {
                 saraAddress.country("Germany").street("Germany Street");
                 sara
                         .email("sara@gmail.com")
-                        .password(passwordEncoder.encode("sara"))
+                        .password(passwordEncoder.encode("123456"))
                         .address(saraAddress);
 
                 sara.addAuthorities(role_user);

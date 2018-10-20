@@ -40,7 +40,8 @@ public class AccountResource {
      * POST  /register : register the user.
      *
      * @param simpleUserDTO the managed user View Model
-     * @throws URISyntaxException
+     * @return the ResponseEntity with status 201 (Created) and with body the new customerOrder, or with status 400 (Bad Request) if the customerOrder has already an ID
+     * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PostMapping("/register")
     public ResponseEntity<Customer> registerAccount(@Valid @RequestBody SimpleUserDTO simpleUserDTO) throws URISyntaxException {
