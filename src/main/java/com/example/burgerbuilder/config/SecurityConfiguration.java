@@ -1,5 +1,7 @@
 package com.example.burgerbuilder.config;
 
+import com.example.burgerbuilder.security.jwt.JWTConfigurer;
+import com.example.burgerbuilder.security.jwt.TokenProvider;
 import org.springframework.beans.factory.BeanInitializationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -47,12 +49,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final UserDetailsService userDetailsService;
 
+    private final TokenProvider tokenProvider;
+
     // Don't add the default constructor if you intend to mark the instance members final, otherwise it throws exception.
     // public SecurityConfiguration() { }
-    public SecurityConfiguration(AuthenticationManagerBuilder authenticationManagerBuilder, DataSource dataSource, UserDetailsService userDetailsService) {
+    public SecurityConfiguration(AuthenticationManagerBuilder authenticationManagerBuilder, DataSource dataSource, UserDetailsService userDetailsService, TokenProvider tokenProvider) {
         this.authenticationManagerBuilder = authenticationManagerBuilder;
         this.dataSource = dataSource;
         this.userDetailsService = userDetailsService;
+        this.tokenProvider = tokenProvider;
     }
 
     @PostConstruct
@@ -114,6 +119,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         super.configure(http);
+        // http.apply(securityConfigurerAdapter());
+    }
+
+    private JWTConfigurer securityConfigurerAdapter() {
+        return new JWTConfigurer(tokenProvider);
     }
 
 }
