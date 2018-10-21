@@ -44,7 +44,7 @@ public class TokenProvider {
             log.debug("Using a Base64-encoded JWT secret key");
             keyBytes = secret.getBytes(StandardCharsets.UTF_8);
         }
-        this.key = Keys.hmacShaKeyFor(keyBytes);
+        this.key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
         this.tokenValidityInMilliseconds = 1000 * 3600;
         this.tokenValidityInMillisecondsForRememberMe = 1000 * 3600;
     }
