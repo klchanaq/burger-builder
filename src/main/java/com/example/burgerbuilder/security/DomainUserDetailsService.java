@@ -50,6 +50,6 @@ public class DomainUserDetailsService implements UserDetailsService {
                 customer.getAuthorities().stream()
                         .map(authority -> new SimpleGrantedAuthority(authority.getName()))
                         .collect(Collectors.toList());
-        return new User(customer.getEmail(), customer.getPassword(), grantedAuthorities);
+        return new User(String.valueOf(customer.getId()), customer.getPassword(), grantedAuthorities);
     }
 }

@@ -78,13 +78,41 @@ export const auth = (email, password, loginStatus) => {
   return dispatch => {
     dispatch(authStart());
 
-    const fakeUser = fakeUserStore.createNewFakeUser();
-    const fakeUserEmail = fakeUser + "@test.com";
-
     const url =
       loginStatus === "Sign-up"
-        ? "/api/authenticate/signup"
-        : "/api/authenticate/signin";
+        ? "/api/register"
+        : "/api/authenticate";
+
+    const loginData = {
+      email: email,
+      password: password
+    };
+
+    axios
+        .post(url, loginData)
+        .then(response => {
+            if (loginStatus === "Sign-up") {
+                const customerData = response.data;
+                console.log('Registered Customer: ', customerData);
+            } else {
+                const jwttoken = response.data;
+                console.log('jwttoken: ', jwttoken);
+                dispatch(authSuccess(jwttoken));
+            }
+        })
+        .catch(error => {
+            console.log(error);
+            const err = new Error("Failed to " + loginStatus + " User.");
+            if (loginStatus === "Sign-up") {
+            } else {
+                dispatch(authFail(err));
+            }
+        });
+
+    /*
+
+    const fakeUser = fakeUserStore.createNewFakeUser();
+    const fakeUserEmail = fakeUser + "@test.com";
 
     const loginData = {
       username: null,
@@ -119,5 +147,7 @@ export const auth = (email, password, loginStatus) => {
       1000,
       Math.random()
     );
+
+    */
   };
 };

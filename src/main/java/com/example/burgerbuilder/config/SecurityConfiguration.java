@@ -15,6 +15,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
@@ -118,8 +119,23 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        super.configure(http);
-        // http.apply(securityConfigurerAdapter());
+        // super.configure(http);
+        http
+                .csrf()
+                .disable()
+                .headers()
+                .frameOptions()
+                .disable()
+                .and()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .authorizeRequests()
+                .antMatchers("/api/register").permitAll()
+                .antMatchers("/api/authenticate").permitAll()
+                .antMatchers("/api/**").authenticated()
+                .and()
+                .apply(securityConfigurerAdapter());
     }
 
     private JWTConfigurer securityConfigurerAdapter() {
