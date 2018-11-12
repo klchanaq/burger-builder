@@ -7,6 +7,7 @@ import { auth } from "../../store/actions/index";
 import Input from "../../components/UI/Input/Input";
 import Button from "../../components/UI/Button/Button";
 import Spinner from "../../components/UI/Spinner/Spinner";
+import { Redirect } from "react-router-dom";
 
 function checkValidity(value, rules = {}) {
   let isValid = true; // true at this moment in order to solve the common validation gotcha
@@ -124,6 +125,11 @@ class Auth extends Component {
   };
 
   render() {
+
+    if (this.props.isAuthenticated) {
+      return <Redirect to="/" />;
+    }
+
     let formControls = Object.entries(this.state.controls).map(
       ([key, formEl]) => {
         return (
@@ -170,7 +176,8 @@ class Auth extends Component {
 const mapStateToProps = state => {
   return {
     loading: state.auth.loading,
-    error: state.auth.error
+    error: state.auth.error,
+    isAuthenticated: state.auth.idToken !== null
   };
 };
 

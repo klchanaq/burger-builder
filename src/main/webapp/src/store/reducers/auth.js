@@ -1,4 +1,4 @@
-import { AUTH_START, AUTH_SUCCESS, AUTH_FAIL, AUTH_LOGOUT } from "../actions/actionTypes";
+import { AUTH_START, AUTH_SIGNUP_SUCCESS, AUTH_SUCCESS, AUTH_FAIL, AUTH_LOGOUT } from "../actions/actionTypes";
 
 const initialState = {
   idToken: null,
@@ -17,6 +17,11 @@ const reducer = (state = initialState, action) => {
         error: null,
         loading: true
       };
+    case AUTH_SIGNUP_SUCCESS: 
+      return {
+        ...state,
+        loading: false
+      }
     case AUTH_SUCCESS:
       return {
         ...state,

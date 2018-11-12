@@ -1,5 +1,6 @@
 import {
   AUTH_START,
+  AUTH_SIGNUP_SUCCESS,
   AUTH_SUCCESS,
   AUTH_FAIL,
   AUTH_LOGOUT
@@ -40,6 +41,12 @@ const fakeUserStore = generateFakeUser();
 const authStart = () => {
   return {
     type: AUTH_START
+  };
+};
+
+const authSignUpSuccess = () => {
+  return {
+    type: AUTH_SIGNUP_SUCCESS
   };
 };
 
@@ -94,6 +101,7 @@ export const auth = (email, password, loginStatus) => {
             if (loginStatus === "Sign-up") {
                 const customerData = response.data;
                 console.log('Registered Customer: ', customerData);
+                dispatch(authSignUpSuccess());
             } else {
                 const jwttoken = response.data;
                 console.log('jwttoken: ', jwttoken);
