@@ -12,6 +12,7 @@ import _ from "lodash";
 /* show how to import lodash function(s) */
 import _isNil from "lodash/isNil";
 import Checkout from "./containers/Checkout/Checkout";
+import Logout from "./containers/Logout/Logout";
 
 class App extends Component {
   showLodashExamples = () => {
@@ -31,6 +32,11 @@ class App extends Component {
     );
   };
 
+  shouldComponentUpdate(nextProps, nextState) {
+    console.log("[App] shouldComponentUpdate...", nextProps, nextState);
+    return true;
+  }
+
   render() {
     console.log("[App] render()...", this.props);
     this.showLodashExamples();
@@ -43,6 +49,7 @@ class App extends Component {
             <Route path="/orders" component={Orders} />
             <Route path="/auth" component={Auth} />
             {/* <Redirect from="/" to="/burgerBuilder" /> */}
+            <Route path="/logout" component={Logout} />
             <Route path="*" render={() => <p>Home Page</p>} />
           </Switch>
           {/* <BurgerBuilder />

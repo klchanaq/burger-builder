@@ -4,10 +4,18 @@ import Aux from "../HOC";
 import Toolbar from "../../components/Navigation/Toolbar/Toolbar";
 import SideDrawer from "../../components/Navigation/SideDrawer/SideDrawer";
 
+import { connect } from 'react-redux';
+
 class Layout extends Component {
   state = {
     showSideDrawer: false
   };
+
+  shouldComponentUpdate(nextProps, nextState) {
+    console.log("[Layout] shouldComponentUpdate...", nextProps, nextState);
+    return true;
+  }
+  
 
   sideDrawerOpenHandler = () => {
     this.setState({
@@ -33,10 +41,11 @@ class Layout extends Component {
     console.log("[Layout] render()...", this.props);
     return (
       <Aux>
-        <Toolbar drawerToggleClicked={this.sideDrawerToggleHandler} />
+        <Toolbar drawerToggleClicked={this.sideDrawerToggleHandler} isAuth={this.props.isAuthenticated} />
         <SideDrawer
           open={this.state.showSideDrawer}
           closed={this.sideDrawerClosedHandler}
+          isAuth={this.props.isAuthenticated}
         />
         <main className="Layout-Content">{this.props.children}</main>
       </Aux>
@@ -44,4 +53,10 @@ class Layout extends Component {
   }
 }
 
-export default Layout;
+const mapStateToProps = state => {
+  return {
+    isAuthenticated: state.auth.idToken !== null
+  };
+};
+
+export default connect(mapStateToProps, null)(Layout);

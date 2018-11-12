@@ -104,6 +104,9 @@ export const auth = (email, password, loginStatus) => {
                 dispatch(authSignUpSuccess());
             } else {
                 const jwttoken = response.data;
+                localStorage.setItem('idToken', jwttoken.idToken);
+                localStorage.setItem('localId', jwttoken.localId);
+                localStorage.setItem('username', jwttoken.email);
                 console.log('jwttoken: ', jwttoken);
                 dispatch(authSuccess(jwttoken));
             }
@@ -157,5 +160,14 @@ export const auth = (email, password, loginStatus) => {
     );
 
     */
+  };
+};
+
+export const logout = () => {
+  return dispatch => {
+    localStorage.removeItem('idToken');
+    localStorage.removeItem('localId');
+    localStorage.removeItem('username');
+    dispatch(authLogout());
   };
 };
