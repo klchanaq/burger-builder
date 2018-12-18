@@ -67,7 +67,8 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public Customer saveWithDemoData(Customer customer) {
         log.debug("Request to save Customer : {}", customer);
-        return customerRepository.save(customer);
+        // return customerRepository.save(customer);
+        return customerRepository.saveAndFlush(customer); // Use saveAndFlush to fix the conflict on saving Demo Data
     }
 
     /**
