@@ -78,8 +78,10 @@ public class DatabaseConfiguration {
                         .deliveryMethod(DELIVERYMETHOD_TYPES.FASTEST)
                         .customer(bob);
 
-                bob.addCustomerOrders(bobOrder1).addCustomerOrders(bobOrder2);
+                // bob.addCustomerOrders(bobOrder1).addCustomerOrders(bobOrder2);
                 customerService.saveWithDemoData(bob);
+                customerOrderService.save(bobOrder1);
+                customerOrderService.save(bobOrder2);
 
                 Customer sara = new Customer();
                 Address saraAddress = new Address();
@@ -104,8 +106,10 @@ public class DatabaseConfiguration {
                         .price(7.5f)
                         .customer(sara);
 
-                sara.addCustomerOrders(saraOrder1).addCustomerOrders(saraOrder2);
+                // sara.addCustomerOrders(saraOrder1).addCustomerOrders(saraOrder2);
                 customerService.saveWithDemoData(sara);
+                customerOrderService.save(saraOrder1);
+                customerOrderService.save(saraOrder2);
 
             }
         };

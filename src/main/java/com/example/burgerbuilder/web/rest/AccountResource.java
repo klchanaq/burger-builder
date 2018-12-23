@@ -98,10 +98,15 @@ public class AccountResource {
 
         JWTToken jwtToken = new JWTToken();
 
-        String localId = authentication.getPrincipal() instanceof UserDetails ?
-                ((UserDetails) authentication.getPrincipal()).getUsername() :
-                authentication.getPrincipal() instanceof String ?
-                (String) authentication.getPrincipal() : null;
+        //String localId = authentication.getPrincipal() instanceof UserDetails ?
+        //        ((UserDetails) authentication.getPrincipal()).getUsername() :
+        //        authentication.getPrincipal() instanceof String ?
+        //        (String) authentication.getPrincipal() : null;
+
+        String localId = authentication.getName();
+        // Since Authentication's Principal maybe an UserDetails type object or a String,
+        // 'authentication.getName()' method consists of # authentication principal type checking ( e.g. UserDetails / String )
+        // and # null checking, if the authentication principal is null, it simply returns a empty string.
 
         jwtToken
                 .idToken(jwt)
