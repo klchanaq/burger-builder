@@ -8,12 +8,16 @@ import com.example.burgerbuilder.web.rest.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -114,6 +118,26 @@ public class CustomerOrderResource {
         log.debug("REST request to delete CustomerOrder : {}", id);
         customerOrderService.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
+    }
+
+    /**
+     * GET  /customerOrders?customerId=:customerId : get all the CustomerOrders, filtered by customerId
+     *
+     * @param customerId the id of the Customer entity
+     * @return the ResponseEntity with status 200 (OK) and the list of customerOrders in body
+     */
+    @GetMapping(value = "/customerOrders", params = {"customerId"})
+    // @PreAuthorize("#customerId == authentication.name")
+    public List<CustomerOrder> getCustomerOrdersByCustomerId(
+            @RequestParam("customerId") Long customerId,
+            Principal principal,
+            @AuthenticationPrincipal UserDetails authPrincipal) {
+        System.out.println("principal = " + principal);
+        System.out.println("principal.getClass() = " + principal.getClass());
+        System.out.println("authPrincipal = " + authPrincipal);
+        System.out.println("authPrincipal.getClass() = " + authPrincipal.getClass());
+        log.debug("REST request to get CustomerOrders by customerId: {}", customerId);
+        return customerOrderService.findCustomerOrdersByCustomerId(customerId);
     }
 
 }

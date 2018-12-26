@@ -20,12 +20,12 @@ public class CustomerOrderServiceImpl implements CustomerOrderService {
 
     private final Logger log = LoggerFactory.getLogger(CustomerOrderServiceImpl.class);
 
-    private final CustomerOrderRepository CustomerOrderRepository;
+    private final CustomerOrderRepository customerOrderRepository;
 
     private final CustomerOrderDAO customerOrderDAO;
 
-    public CustomerOrderServiceImpl(CustomerOrderRepository CustomerOrderRepository, CustomerOrderDAO customerOrderDAO) {
-        this.CustomerOrderRepository = CustomerOrderRepository;
+    public CustomerOrderServiceImpl(CustomerOrderRepository customerOrderRepository, CustomerOrderDAO customerOrderDAO) {
+        this.customerOrderRepository = customerOrderRepository;
         this.customerOrderDAO = customerOrderDAO;
     }
 
@@ -38,7 +38,7 @@ public class CustomerOrderServiceImpl implements CustomerOrderService {
     @Override
     public CustomerOrder save(CustomerOrder CustomerOrder) {
         log.debug("Request to save CustomerOrder : {}", CustomerOrder);
-        return CustomerOrderRepository.save(CustomerOrder);
+        return customerOrderRepository.save(CustomerOrder);
     }
 
     /**
@@ -50,7 +50,7 @@ public class CustomerOrderServiceImpl implements CustomerOrderService {
     @Transactional(readOnly = true)
     public List<CustomerOrder> findAll() {
         log.debug("Request to get all CustomerOrders");
-        return CustomerOrderRepository.findAll();
+        return customerOrderRepository.findAll();
     }
 
     /**
@@ -63,7 +63,7 @@ public class CustomerOrderServiceImpl implements CustomerOrderService {
     @Transactional(readOnly = true)
     public Optional<CustomerOrder> findOne(Long id) {
         log.debug("Request to get find an CustomerOrder id: {}", id);
-        return CustomerOrderRepository.findById(id);
+        return customerOrderRepository.findById(id);
     }
 
     /**
@@ -74,7 +74,19 @@ public class CustomerOrderServiceImpl implements CustomerOrderService {
     @Override
     public void delete(Long id) {
         log.debug("Request to get delete an CustomerOrder : {}", id);
-        CustomerOrderRepository.deleteById(id);
+        customerOrderRepository.deleteById(id);
+    }
+
+    /**
+     * Get all the CustomerOrders, filtered by customerId
+     *
+     * @param customerId the id of the Customer entity
+     * @return the collection of entities which match the condition
+     */
+    @Override
+    public List<CustomerOrder> findCustomerOrdersByCustomerId(Long customerId) {
+        log.debug("Request to get find CustomerOrders by customerId: {}", customerId);
+        return customerOrderRepository.findByCustomer_Id(customerId);
     }
 
 }

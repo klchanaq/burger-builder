@@ -39,4 +39,13 @@ public interface CustomerOrderService {
      * @param id the id of the entity
      */
     void delete(Long id);
+
+    /**
+     * Get all the CustomerOrders, filtered by customerId
+     *
+     * @param customerId the id of the Customer entity
+     * @return the collection of entities which match the condition
+     */
+    List<CustomerOrder> findCustomerOrdersByCustomerId(Long customerId);
+
 }
