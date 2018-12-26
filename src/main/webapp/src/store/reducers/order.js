@@ -9,50 +9,7 @@ import {
 } from "../actions/actionTypes";
 
 const initialState = {
-  orders: [
-    {
-      id: 1,
-      ingredients: { bacon: 1, cheese: 2, salad: 1, meat: 3 },
-      price: 9.5,
-      deliveryMethod: "NOT_SPECIFIC",
-      customer: {
-        id: 1,
-        name: "hkcustomer",
-        email: "hkcustomer@gmail.com",
-        address: { country: "HK", street: "HK Street", zipCode: null }
-      }
-    },
-    {
-      id: 2,
-      ingredients: { bacon: 0, cheese: 0, salad: 0, meat: 5 },
-      price: 11.5,
-      deliveryMethod: "FASTEST",
-      customer: 1
-    },
-    {
-      id: 3,
-      ingredients: { bacon: 5, cheese: 0, salad: 1, meat: 0 },
-      price: 10.4,
-      deliveryMethod: "NORMAL",
-      customer: {
-        id: 2,
-        name: "germanCustomer",
-        email: "germanCustomer@gmail.com",
-        address: {
-          country: "Germany",
-          street: "Germany Street",
-          zipCode: null
-        }
-      }
-    },
-    {
-      id: 4,
-      ingredients: { bacon: 0, cheese: 2, salad: 3, meat: 0 },
-      price: 7.5,
-      deliveryMethod: "NOT_SPECIFIC",
-      customer: 2
-    }
-  ],
+  orders: [],
   loading: false, // will be used for showing Spinner, executed before any order action
   purchased: false
 };

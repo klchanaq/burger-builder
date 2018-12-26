@@ -98,7 +98,7 @@ const fetchOrdersStart = () => {
 export const fetchOrders = () => {
   return (dispatch, getStore) => {
     dispatch(fetchOrdersStart());
-    setTimeout(
+    /* setTimeout(
       randomNum => {
         if (randomNum > 0.2) {
           const response = { data: getStore().order.orders };
@@ -111,19 +111,25 @@ export const fetchOrders = () => {
       },
       500,
       Math.random()
-    );
-    // TODO: React Complete Guide 317+ : Add idToken for protected resources as RequestParams ( ?auth=xyz ).
-    // axios
-    //   .get("/api/customerOrders")
-    //   .then(res => {
-    //     const fetchOrders = [];
-    //     for (let key in res.data) {
-    //       fetchOrders.push({ ...res.data[key], id: key });
-    //     }
-    //     this.setState({ loading: false, orders: fetchOrders });
-    //   })
-    //   .catch(err => {
-    //     this.setState({ loading: false });
-    //   });
+    ); */
+
+    // React Complete Guide 317+ : Add idToken for protected resources as RequestParams ( ?auth=xyz ).
+    const idToken = getStore().auth.idToken || localStorage.getItem("idToken");
+    const localId = getStore().auth.localId || localStorage.getItem("localId");
+    axios({
+      url: "/api/customerOrders",
+      method: "GET",
+      headers: { Authorization: `Bearer ${idToken}` },
+      params: {
+        customerId: localId
+      }
+    })
+      .then(res => {
+        const fetchedOrders = res.data;
+        dispatch(fetchOrdersSuccess(fetchedOrders));
+      })
+      .catch(err => {
+        dispatch(fetchOrdersFail(err));
+      });
   };
 };
