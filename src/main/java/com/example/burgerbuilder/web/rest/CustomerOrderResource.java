@@ -127,7 +127,11 @@ public class CustomerOrderResource {
      * @return the ResponseEntity with status 200 (OK) and the list of customerOrders in body
      */
     @GetMapping(value = "/customerOrders", params = {"customerId"})
-    // @PreAuthorize("#customerId == authentication.name")
+    // Spring Security Annotations Examples
+    // @PreAuthorize("prinicipal.username.equals(#customerId)") // this requires the change on @RequestParam Type from Long to String
+    // @PreAuthorize("principal.username.equals(#customerId.toString())") // this is okay.
+    // @Secured({"ROLE_ADMIN", "ROLE_USER"})
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')") // this is okay
     public List<CustomerOrder> getCustomerOrdersByCustomerId(
             @RequestParam("customerId") Long customerId,
             Principal principal,
@@ -136,6 +140,17 @@ public class CustomerOrderResource {
         System.out.println("principal.getClass() = " + principal.getClass());
         System.out.println("authPrincipal = " + authPrincipal);
         System.out.println("authPrincipal.getClass() = " + authPrincipal.getClass());
+
+        String customerIdFromAuthentication = principal.getName();
+        Long customerIdFromAuthenticationInLong = Long.valueOf(customerIdFromAuthentication);
+        System.out.println("customerId = " + customerId);
+        System.out.println("customerIdFromAuthenticationInLong = " + customerIdFromAuthenticationInLong);
+        if (!customerIdFromAuthenticationInLong.equals(customerId)) {
+            throw new BadRequestAlertException(
+                    "Parameter CustomerId " + customerId +
+                            " does not match " +
+                            "Current User Id " + customerIdFromAuthenticationInLong, ENTITY_NAME, null);
+        }
         log.debug("REST request to get CustomerOrders by customerId: {}", customerId);
         return customerOrderService.findCustomerOrdersByCustomerId(customerId);
     }
