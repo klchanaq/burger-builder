@@ -123,6 +123,12 @@ export const fetchOrders = () => {
       params: {
         customerId: localId
       }
+      /* paramsSerializer: function(params) { 
+        return Qs.stringify(params, { arrayFormat: "repeat" }); // most common pattern
+        //return Qs.stringify(params);
+        //return Qs.stringify(params, { arrayFormat: "brackets" });
+        //return new URLSearchParams(params);
+      } */
     })
       .then(res => {
         const fetchedOrders = res.data;
