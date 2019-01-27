@@ -65,7 +65,7 @@ public class CustomerServiceImpl implements CustomerService {
      * @return the persisted entity
      */
     @Override
-    public Customer saveWithDemoData(Customer customer) {
+    public Customer saveAndFlush(Customer customer) {
         log.debug("Request to save Customer : {}", customer);
         // return customerRepository.save(customer);
         return customerRepository.saveAndFlush(customer); // Use saveAndFlush to fix the conflict on saving Demo Data

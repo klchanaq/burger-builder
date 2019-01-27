@@ -24,6 +24,24 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import java.util.HashSet;
 
+/* Notes:
+ *       #1 The EntityManager on SimpleJpaRepository is added on Constructor but not auto-wired, please be careful
+ *       #2 The current way to auto-wire an EntityManager ( which is ThreadLocal, manage objects by its PersistenceContext ) in Spring Data,
+ *       is to put the
+ *       "@PersistenceContext private EntityManager em;"
+ *       at the classes at repository package you defined for the annotation @EnableJpaRepositories,
+ *       and marked the class with @Transactional ( Spring-Framework Version )
+ *       #3 Jpa Cascade Types define the operation related to the types,
+ *       e.g. CascadeType.Persist <=> EntityManager.persist();
+ *       CascadeType.Merge <=> EntityManager.merge();
+ *       #4 If you persist an object which has id using em.persist(), it throws exception, you should instead use merge()
+ *       #5 If you merge an object which has id
+ *       Two cases:
+ *       Case 1: The id matches with one of the records having the same id => update database record
+ *       Case 2: The id does not match with one of the records having the same id => insert the record with a sequence id
+ *       e.g. setId(10L), but current sequence is id = 3, then hibernate insert the record as id = 4
+ * */
+
 @Configuration
 @EnableJpaRepositories("com.example.burgerbuilder.repository")
 @EnableTransactionManagement
@@ -79,7 +97,7 @@ public class DatabaseConfiguration {
                         .customer(bob);
 
                 // bob.addCustomerOrders(bobOrder1).addCustomerOrders(bobOrder2);
-                customerService.saveWithDemoData(bob);
+                customerService.saveAndFlush(bob);
                 customerOrderService.save(bobOrder1);
                 customerOrderService.save(bobOrder2);
 
@@ -107,7 +125,7 @@ public class DatabaseConfiguration {
                         .customer(sara);
 
                 // sara.addCustomerOrders(saraOrder1).addCustomerOrders(saraOrder2);
-                customerService.saveWithDemoData(sara);
+                customerService.saveAndFlush(sara);
                 customerOrderService.save(saraOrder1);
                 customerOrderService.save(saraOrder2);
 

@@ -13,10 +13,18 @@ public interface CustomerOrderService {
     /**
      * Save a CustomerOrder.
      *
-     * @param CustomerOrder the entity to save
+     * @param customerOrder the entity to save
      * @return the persisted entity
      */
-    CustomerOrder save(CustomerOrder CustomerOrder);
+    CustomerOrder save(CustomerOrder customerOrder);
+
+    /**
+     * Save and Flush a CustomerOrder.
+     *
+     * @param customerOrder the entity to save
+     * @return the persisted entity
+     */
+    CustomerOrder saveAndFlush(CustomerOrder customerOrder);
 
     /**
      * Get all the CustomerOrders.

@@ -32,13 +32,25 @@ public class CustomerOrderServiceImpl implements CustomerOrderService {
     /**
      * Save a CustomerOrder.
      *
-     * @param CustomerOrder the entity to save
+     * @param customerOrder the entity to save
      * @return the persisted entity
      */
     @Override
-    public CustomerOrder save(CustomerOrder CustomerOrder) {
-        log.debug("Request to save CustomerOrder : {}", CustomerOrder);
-        return customerOrderRepository.save(CustomerOrder);
+    public CustomerOrder save(CustomerOrder customerOrder) {
+        log.debug("Request to save CustomerOrder : {}", customerOrder);
+        return customerOrderRepository.save(customerOrder);
+    }
+
+    /**
+     * Save and Flush a CustomerOrder.
+     *
+     * @param customerOrder the entity to save
+     * @return the persisted entity
+     */
+    @Override
+    public CustomerOrder saveAndFlush(CustomerOrder customerOrder) {
+        log.debug("Request to save and flush CustomerOrder : {}", customerOrder);
+        return customerOrderRepository.saveAndFlush(customerOrder);
     }
 
     /**

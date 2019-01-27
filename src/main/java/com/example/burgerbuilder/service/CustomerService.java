@@ -24,7 +24,7 @@ public interface CustomerService {
      * @param customer the demo entity to save
      * @return the persisted entity
      */
-    Customer saveWithDemoData(Customer customer);
+    Customer saveAndFlush(Customer customer);
 
     /**
      * Get all the customers.

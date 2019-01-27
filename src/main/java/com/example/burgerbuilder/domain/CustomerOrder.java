@@ -158,7 +158,7 @@ public class CustomerOrder implements Serializable {
                 ", ingredients=" + ingredients +
                 ", price=" + price +
                 ", deliveryMethod=" + deliveryMethod +
-                ", customer=" + customer +
+                // ", customer=" + customer +
                 '}';
     }
 }
