@@ -1,5 +1,6 @@
 package com.example.burgerbuilder.domain;
 
+import com.example.burgerbuilder.domain.EmbeddedDomain.Address;
 import com.example.burgerbuilder.domain.EmbeddedDomain.Ingredients;
 import com.example.burgerbuilder.domain.enumeration.DELIVERYMETHOD_TYPES;
 import com.fasterxml.jackson.annotation.*;
@@ -57,17 +58,15 @@ public class CustomerOrder implements Serializable {
     @Column(nullable = false)
     private Float price;
 
-    @CreationTimestamp
-    private LocalDateTime createdDateTime;
-
-    @UpdateTimestamp
-    private LocalDateTime updatedDateTime;
-
     @NotNull
     // Learned from Jhipster on 18-07-2018, For passing String (e.g. deliveryMetod: "FASTEST") at frontend to @RequestBody at Spring
     @Enumerated(value = EnumType.STRING)
     @Column(nullable = false)
     private DELIVERYMETHOD_TYPES deliveryMethod = DELIVERYMETHOD_TYPES.NOT_SPECIFIC; // Don't use Enum<T> here!
+
+    @Embedded
+    @NotNull
+    private Address address;
 
     @NotNull
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
@@ -77,6 +76,12 @@ public class CustomerOrder implements Serializable {
     //@JsonBackReference
     //@JsonManagedReference
     private Customer customer;
+
+    @CreationTimestamp
+    private LocalDateTime createdDateTime;
+
+    @UpdateTimestamp
+    private LocalDateTime updatedDateTime;
 
     public Long getId() {
         return id;
@@ -138,6 +143,19 @@ public class CustomerOrder implements Serializable {
         this.deliveryMethod = deliveryMethod;
     }
 
+    public Address getAddress() {
+        return address;
+    }
+
+    public CustomerOrder address(Address address) {
+        this.address = address;
+        return this;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -158,6 +176,7 @@ public class CustomerOrder implements Serializable {
                 ", ingredients=" + ingredients +
                 ", price=" + price +
                 ", deliveryMethod=" + deliveryMethod +
+                ", address=" + address +
                 // ", customer=" + customer +
                 '}';
     }

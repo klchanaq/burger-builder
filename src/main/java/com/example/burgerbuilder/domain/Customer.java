@@ -1,6 +1,5 @@
 package com.example.burgerbuilder.domain;
 
-import com.example.burgerbuilder.domain.EmbeddedDomain.Address;
 import com.fasterxml.jackson.annotation.*;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -36,12 +35,6 @@ public class Customer implements Serializable {
     @Column(name = "password_hash", length = 60, nullable = false)
     private String password;
 
-    @Embedded
-    private Address address;
-
-    @UpdateTimestamp
-    private LocalDate updatedDate;
-
     @ManyToMany
     @JoinTable(
             name = "customer_authority",
@@ -53,6 +46,9 @@ public class Customer implements Serializable {
     //@JsonManagedReference
     //@JsonBackReference
     private Set<CustomerOrder> customerOrders = new HashSet<>();
+
+    @UpdateTimestamp
+    private LocalDate updatedDate;
 
     public Long getId() {
         return id;
@@ -86,19 +82,6 @@ public class Customer implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public Address getAddress() {
-        return address;
-    }
-
-    public Customer address(Address address) {
-        this.address = address;
-        return this;
-    }
-
-    public void setAddress(Address address) {
-        this.address = address;
     }
 
     public Set<Authority> getAuthorities() {
@@ -167,7 +150,6 @@ public class Customer implements Serializable {
         return "Customer{" +
                 "id=" + id +
                 ", email='" + email + '\'' +
-                ", address=" + address +
                 // ", customerOrders=" + customerOrders +
                 '}';
     }

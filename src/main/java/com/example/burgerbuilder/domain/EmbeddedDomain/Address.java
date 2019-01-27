@@ -2,6 +2,8 @@ package com.example.burgerbuilder.domain.EmbeddedDomain;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Objects;
@@ -19,6 +21,8 @@ public class Address implements Serializable {
 
     @Size(min = 0, max = 20)
     @Column
+    // @NotBlank & @NotNull are not working on Embeddable Domain
+    // You can only override the attributes outside using @Column
     private String zipCode;
 
     public String getCountry() {

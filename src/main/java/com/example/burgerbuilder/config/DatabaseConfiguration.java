@@ -75,18 +75,19 @@ public class DatabaseConfiguration {
                 authorityRepository.saveAndFlush(role_user);
 
                 Customer bob = new Customer();
-                Address bobAddress = new Address();
-                bobAddress.country("HK").street("HK Street");
                 bob.email("bob@gmail.com")
-                        .password(passwordEncoder.encode("123456"))
-                        .address(bobAddress);
+                        .password(passwordEncoder.encode("123456"));
 
                 bob.addAuthorities(role_admin).addAuthorities(role_user);
+
+                Address bobAddress = new Address();
+                bobAddress.country("HK").street("HK Street");
 
                 CustomerOrder bobOrder1 = new CustomerOrder();
                 bobOrder1
                         .ingredients(new Ingredients(1, 2, 1, 3))
                         .price(9.5f)
+                        .address(bobAddress)
                         .customer(bob);
 
                 CustomerOrder bobOrder2 = new CustomerOrder();
@@ -94,6 +95,7 @@ public class DatabaseConfiguration {
                         .ingredients(new Ingredients(0, 0, 0, 5))
                         .price(11.5f)
                         .deliveryMethod(DELIVERYMETHOD_TYPES.FASTEST)
+                        .address(bobAddress)
                         .customer(bob);
 
                 // bob.addCustomerOrders(bobOrder1).addCustomerOrders(bobOrder2);
@@ -102,26 +104,28 @@ public class DatabaseConfiguration {
                 customerOrderService.save(bobOrder2);
 
                 Customer sara = new Customer();
-                Address saraAddress = new Address();
-                saraAddress.country("Germany").street("Germany Street");
-                sara
-                        .email("sara@gmail.com")
-                        .password(passwordEncoder.encode("123456"))
-                        .address(saraAddress);
+
+                sara.email("sara@gmail.com")
+                        .password(passwordEncoder.encode("123456"));
 
                 sara.addAuthorities(role_user);
+
+                Address saraAddress = new Address();
+                saraAddress.country("Germany").street("Germany Street").zipCode("5566");
 
                 CustomerOrder saraOrder1 = new CustomerOrder();
                 saraOrder1
                         .ingredients(new Ingredients(5, 0, 1, 0))
                         .price(new Float(10.4f))
                         .deliveryMethod(DELIVERYMETHOD_TYPES.NORMAL)
+                        .address(saraAddress)
                         .customer(sara);
 
                 CustomerOrder saraOrder2 = new CustomerOrder();
                 saraOrder2
                         .ingredients(new Ingredients(0, 2, 3, 0))
                         .price(7.5f)
+                        .address(saraAddress)
                         .customer(sara);
 
                 // sara.addCustomerOrders(saraOrder1).addCustomerOrders(saraOrder2);

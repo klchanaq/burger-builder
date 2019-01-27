@@ -181,21 +181,20 @@ class ContactData extends Component {
 
   orderHandler = $event => {
     $event.preventDefault();
-    this.setState({ loading: true });
+    // this.setState({ loading: true });
     const { orderForm } = this.state;
     const order = {
       ingredients: this.props.ings,
       price: this.props.totalPrice,
-      customer: {
-        name: orderForm.name.value,
-        address: {
-          street: orderForm.street.value,
-          zipCode: orderForm.zipCode.value,
-          country: orderForm.country.value
-        },
-        email: orderForm.email.value
+      deliveryMethod: orderForm.deliveryMethod.value,
+      address: {
+        street: orderForm.street.value,
+        zipCode: orderForm.zipCode.value,
+        country: orderForm.country.value
       },
-      deliveryMethod: orderForm.deliveryMethod.value
+      customer: {
+        email: orderForm.email.value
+      }
     };
     this.props.onOrderBurger(order);
     // setTimeout(() => {

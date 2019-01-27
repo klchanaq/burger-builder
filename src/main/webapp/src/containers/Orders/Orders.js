@@ -26,6 +26,7 @@ class Orders extends Component {
             key={order.id}
             ingredients={order.ingredients}
             price={order.price.toFixed(2)}
+            address={order.address}
           />
         );
       });
