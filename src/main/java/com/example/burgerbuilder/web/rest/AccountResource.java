@@ -66,15 +66,16 @@ public class AccountResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PostMapping("/register")
-    public ResponseEntity<Customer> register(@Valid @RequestBody SimpleUserDTO simpleUserDTO) throws URISyntaxException {
+    public ResponseEntity<JWTToken> register(@Valid @RequestBody SimpleUserDTO simpleUserDTO) throws URISyntaxException {
         log.debug("Request to register new user account : {}", simpleUserDTO);
         Customer customer = new Customer();
         customer.email(simpleUserDTO.getEmail())
                 .password(simpleUserDTO.getPassword());
         Customer result = customerService.save(customer);
-        return ResponseEntity.created(new URI("/api/customers/" + result.getId()))
-                .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
-                .body(result);
+        // return ResponseEntity.created(new URI("/api/customers/" + result.getId()))
+        //         .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
+        //         .body(result);
+        return this.authenticate(simpleUserDTO);
     }
 
 

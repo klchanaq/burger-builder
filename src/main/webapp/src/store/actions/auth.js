@@ -50,10 +50,10 @@ const authSignUpSuccess = () => {
   };
 };
 
-const authSuccess = authData => {
+const authSuccess = jwttoken => {
   return {
     type: AUTH_SUCCESS,
-    authData: authData
+    authData: jwttoken
   };
 };
 
@@ -86,9 +86,7 @@ export const auth = (email, password, loginStatus) => {
     dispatch(authStart());
 
     const url =
-      loginStatus === "Sign-up"
-        ? "/api/register"
-        : "/api/authenticate";
+      loginStatus === "Sign-up" ? "/api/register" : "/api/authenticate";
 
     const loginData = {
       email: email,
@@ -96,29 +94,23 @@ export const auth = (email, password, loginStatus) => {
     };
 
     axios
-        .post(url, loginData)
-        .then(response => {
-            if (loginStatus === "Sign-up") {
-                const customerData = response.data;
-                console.log('Registered Customer: ', customerData);
-                dispatch(authSignUpSuccess());
-            } else {
-                const jwttoken = response.data;
-                localStorage.setItem('idToken', jwttoken.idToken);
-                localStorage.setItem('localId', jwttoken.localId);
-                localStorage.setItem('username', jwttoken.email);
-                console.log('jwttoken: ', jwttoken);
-                dispatch(authSuccess(jwttoken));
-            }
-        })
-        .catch(error => {
-            console.log(error);
-            const err = new Error("Failed to " + loginStatus + " User.");
-            if (loginStatus === "Sign-up") {
-            } else {
-                dispatch(authFail(err));
-            }
-        });
+      .post(url, loginData)
+      .then(response => {
+        const jwttoken = response.data;
+        localStorage.setItem("idToken", jwttoken.idToken);
+        localStorage.setItem("localId", jwttoken.localId);
+        localStorage.setItem("username", jwttoken.email);
+        console.log("jwttoken: ", jwttoken);
+        dispatch(authSuccess(jwttoken));
+      })
+      .catch(error => {
+        console.log(error);
+        const err = new Error("Failed to " + loginStatus + " User.");
+        if (loginStatus === "Sign-up") {
+        } else {
+          dispatch(authFail(err));
+        }
+      });
 
     /*
 
@@ -165,9 +157,9 @@ export const auth = (email, password, loginStatus) => {
 
 export const logout = () => {
   return dispatch => {
-    localStorage.removeItem('idToken');
-    localStorage.removeItem('localId');
-    localStorage.removeItem('username');
+    localStorage.removeItem("idToken");
+    localStorage.removeItem("localId");
+    localStorage.removeItem("username");
     dispatch(authLogout());
   };
 };

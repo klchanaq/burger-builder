@@ -10,7 +10,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -56,6 +58,11 @@ public class CustomerOrderResource {
         if (customerOrder.getId() != null) {
             throw new BadRequestAlertException("A new customerOrder cannot already have an ID", ENTITY_NAME, "idexists");
         }
+
+        Long actualCustomerId = Long.valueOf(SecurityContextHolder.getContext().getAuthentication().getName());
+        Long claimedCustomerId = customerOrder.getCustomer().getId();
+        Assert.isTrue(actualCustomerId.equals(claimedCustomerId), "[Assertion failed] Ids do not match. User can only edit his / her data.");
+
         CustomerOrder result = customerOrderService.save(customerOrder);
         return ResponseEntity.created(new URI("/api/customerOrders/" + result.getId()))
                 .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
