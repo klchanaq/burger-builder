@@ -55,7 +55,7 @@ class Checkout extends Component {
       return <Redirect to="/" />;
     }
     if (this.props.purchased) {
-      return <Redirect to="/" />;
+      return <Redirect to="/orders" />;
     }
     return (
       <div className="Checkout">

@@ -25,10 +25,10 @@ const reducer = (state = initialState, action) => {
     case AUTH_SUCCESS:
       return {
         ...state,
-        idToken: action.idToken,
-        localId: action.localId,
-        username: action.email,
-        refreshToken: action.refreshToken,
+        idToken: action.authData.idToken,
+        localId: action.authData.localId,
+        username: action.authData.email,
+        refreshToken: action.authData.refreshToken,
         error: null,
         loading: false
       };

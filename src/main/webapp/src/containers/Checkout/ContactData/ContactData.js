@@ -193,7 +193,7 @@ class ContactData extends Component {
         country: orderForm.country.value
       },
       customer: {
-        email: orderForm.email.value
+        id: this.props.localId
       }
     };
     this.props.onOrderBurger(order);
@@ -244,7 +244,8 @@ const mapStateToProps = state => {
   return {
     ings: state.burgerBuilder.ingredients,
     totalPrice: state.burgerBuilder.totalPrice,
-    loading: state.order.loading
+    loading: state.order.loading,
+    localId: state.auth.localId
   };
 };
 

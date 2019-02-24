@@ -41,37 +41,27 @@ export const purchaseInit = () => {
 };
 
 export const purchaseBurger = newOrderData => {
-  return dispatch => {
+  return (dispatch, getStore) => {
     dispatch(purchaseBurgerStart());
-    setTimeout(
-      randomNum => {
-        if (randomNum > 0.2) {
-          dispatch(
-            purchaseBurgerSuccess(
-              fakedNewOrderId++,
-              fakedCustomerId++,
-              newOrderData
-            )
-          );
-        } else {
-          const err = new Error("Failed to POST New Order Data.");
-          dispatch(purchaseBurgerFail(err));
-        }
-      },
-      500,
-      Math.random()
-    );
-    // TODO: React Complete Guide 317+ : Add idToken for protected resources as RequestParams ( ?auth=xyz ).
-    // axios
-    //   .post("/api/customerOrders", order)
-    //   .then(response => {
-    //     console.log("[BurgerBuilder] ", response);
-    //     this.setState({ loading: false });
-    //   })
-    //   .catch(error => {
-    //     console.error("[BurgerBuilder] ", error);
-    //     this.setState({ loading: false });
-    //   });
+    // React Complete Guide 317+ : Add idToken for protected resources as RequestParams ( ?auth=xyz ).
+    const idToken = getStore().auth.idToken || localStorage.getItem("idToken");
+    const localId = getStore().auth.localId || localStorage.getItem("localId");
+    axios({
+          url: "/api/customerOrders",
+          method: "POST",
+          headers: { Authorization: `Bearer ${idToken}` },
+          data: newOrderData
+      })
+      .then(res => {
+        console.log("[BurgerBuilder] ", res);
+        dispatch(purchaseBurgerSuccess(res.data.id, res.data.customer.id, newOrderData));
+        // this.setState({ loading: false });
+      })
+      .catch(err => {
+        console.error("[BurgerBuilder] ", err);
+        dispatch(purchaseBurgerFail(err));
+        // this.setState({ loading: false });
+      });
   };
 };
 
